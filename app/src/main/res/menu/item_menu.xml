@@ -7,5 +7,7 @@
     <item android:id="@+id/candidates"
         android:title="Candidates"
         android:icon="@drawable/candidate"/>
-
+    <item android:id="@+id/user_setting"
+        android:title="User Setting"
+        android:icon="@drawable/setting"/>
 </menu>
