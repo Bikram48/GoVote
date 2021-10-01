@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1001257466359",
+    "project_id": "govote-4098e",
+    "storage_bucket": "govote-4098e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001257466359:android:9b1869b7402481e18c56f2",
+        "android_client_info": {
+          "package_name": "com.example.govote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1001257466359-injg05815hnkbc6pehb9a7r66k4a276k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzVNWHcNmLAHWTIugJB8YcL-LGNcB31Ss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1001257466359-injg05815hnkbc6pehb9a7r66k4a276k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
