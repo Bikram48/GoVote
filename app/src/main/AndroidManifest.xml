@@ -10,15 +10,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GoVote">
         <activity
+            android:name=".AdminDashboard"
+            android:exported="true"
+            android:label="@string/title_activity_admin_dashboard"
+            android:theme="@style/Theme.GoVote.NoActionBar" />
+        <activity
             android:name=".UserSettingActivity"
-            android:label="Setting"
-            android:exported="true" />
+            android:exported="true"
+            android:label="Setting" />
         <activity
             android:name=".CandidatesActivity"
             android:exported="true"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"></activity>
+        <activity
+            android:name=".UserAuthActivity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
             <intent-filter>
@@ -27,10 +36,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".UserAuthActivity"
-            android:exported="true"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
 
         <meta-data
             android:name="preloaded_fonts"

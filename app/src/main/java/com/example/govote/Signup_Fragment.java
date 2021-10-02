@@ -13,10 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.govote.Model.User;
+
 public class Signup_Fragment extends Fragment {
     private EditText mEmailId,mPassword;
     private Button mSignupBtn;
     private FragmentListener fragmentListener;
+
     public Signup_Fragment() {
         // Required empty public constructor
     }
@@ -37,7 +40,7 @@ public class Signup_Fragment extends Fragment {
                 String password=mPassword.getText().toString().trim();
                 User user;
                 if (!mEmailId.equals("") && !mPassword.equals("")) {
-                     user=new User(emailId,password);
+                     user=new User(emailId,password,"1");
                      fragmentListener.createAccountClicked(user);
                 }
                 else {

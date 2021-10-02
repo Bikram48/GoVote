@@ -8,18 +8,31 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.example.govote.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserAuthActivity extends AppCompatActivity implements Signup_Fragment.FragmentListener,
         Login_Fragment.FragmentListener,PasswordReset_Fragment.FragmentListener {
-     Fragment fragment;
-     FragmentManager fragmentManager;
-     FragmentTransaction fragmentTransaction;
+    Fragment fragment;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
      private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +68,11 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-
+                            databaseReference=FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            Map<String,String> userInfo=new HashMap<>();
+                            userInfo.put("email",email);
+                            userInfo.put("isUser","1");
+                            databaseReference.setValue(userInfo);
                         }else{
                             Toast.makeText(UserAuthActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -72,21 +89,68 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
 
     @Override
     public void loginClicked(User user) {
-        userLogin(user.getEmail(),user.getPassword());
+        userLogin(user.getEmail(),user.getPassword(),user.getUserRole());
     }
 
-    public void userLogin(String email,String password){
+    public void userLogin(String email,String password,String userRole){
         mAuth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            startActivity(new Intent(UserAuthActivity.this,MainActivity.class));
+                            if(userRole.equals("Admin")){
+                                Log.d("user_role", "admin or user: ");
+                                checkAdmin(mAuth.getCurrentUser().getUid());
+                            }
+                            if(userRole.equals("User")) {
+                                checkUserRole(mAuth.getCurrentUser().getUid());
+                            }
                         }else{
                             Toast.makeText(UserAuthActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    private void checkAdmin(String userId){
+        FirebaseDatabase.getInstance().getReference("Users").child(userId)
+             .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.hasChild("isAdmin")){
+                    startActivity(new Intent(UserAuthActivity.this,AdminDashboard.class));
+                }else{
+                    Toast.makeText(UserAuthActivity.this, "No admin found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    private void checkUserRole(String userId){
+        Log.d("userid", userId);
+        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference();
+        Query query=databaseReference.child("Users").child(userId);
+               query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.hasChild("isUser")){
+                    Log.d("userid", snapshot.getKey());
+                    startActivity(new Intent(UserAuthActivity.this,MainActivity.class));
+                }
+              else{
+                    Toast.makeText(UserAuthActivity.this, "No user found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
