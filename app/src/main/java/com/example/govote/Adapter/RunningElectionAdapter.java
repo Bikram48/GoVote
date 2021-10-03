@@ -71,6 +71,7 @@ public class RunningElectionAdapter extends RecyclerView.Adapter<RunningElection
             Election election=electionList.get(position);
             Intent intent=new Intent(context,CandidatesActivity.class);
             intent.putExtra("cat",election.getName());
+            intent.putExtra("imageurl",election.getImageUrl());
             context.startActivity(intent);
             //this.clickListener.onItemClick(getAdapterPosition());
         }
