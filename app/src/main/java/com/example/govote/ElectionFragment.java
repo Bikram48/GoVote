@@ -17,6 +17,11 @@ import android.widget.Toast;
 
 import com.example.govote.Adapter.RunningElectionAdapter;
 import com.example.govote.Model.Election;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +31,7 @@ public class ElectionFragment extends Fragment implements RunningElectionAdapter
     private List<Election> electionList=new ArrayList<>();
     RunningElectionAdapter electionAdapter;
     private RecyclerView recyclerView,upcomingELectionRV;
+    DatabaseReference databaseReference;
     public ElectionFragment() {
         // Required empty public constructor
 
@@ -38,6 +44,29 @@ public class ElectionFragment extends Fragment implements RunningElectionAdapter
         View view=inflater.inflate(R.layout.fragment_election, container, false);
         recyclerView=(RecyclerView) view.findViewById(R.id.recyclerView);
         upcomingELectionRV=(RecyclerView) view.findViewById(R.id.upcomingElectionRV);
+        databaseReference= FirebaseDatabase.getInstance().getReference("Election");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot:snapshot.getChildren()){
+                    Election election=dataSnapshot.getValue(Election.class);
+                    electionList.add(election);
+                }
+                electionAdapter=new RunningElectionAdapter(getActivity(),electionList);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+                upcomingELectionRV.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+                recyclerView.setAdapter(electionAdapter);
+                upcomingELectionRV.setAdapter(electionAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+        /*
         electionList.add(new Election("President Election"));
         electionList.add(new Election("Student Election"));
         electionList.add(new Election("Captain Election"));
@@ -45,11 +74,9 @@ public class ElectionFragment extends Fragment implements RunningElectionAdapter
         electionList.add(new Election("Headgirl Election"));
         electionList.add(new Election("Teacher Election"));
         electionList.add(new Election("Principal Election"));
-        electionAdapter=new RunningElectionAdapter(this,electionList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-        upcomingELectionRV.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-        recyclerView.setAdapter(electionAdapter);
-        upcomingELectionRV.setAdapter(electionAdapter);
+
+         */
+
         return view;
     }
 

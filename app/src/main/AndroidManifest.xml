@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.govote">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,10 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GoVote">
         <activity
-            android:name=".AdminDashboard"
-            android:exported="true"
-            android:label="@string/title_activity_admin_dashboard"
-            android:theme="@style/Theme.GoVote.NoActionBar" />
+            android:name=".AddCandidateActivity"
+            android:exported="true" >
+
+        </activity>
+        <activity
+            android:name=".AddElectionActivity"
+            android:exported="true" />
         <activity
             android:name=".UserSettingActivity"
             android:exported="true"
@@ -25,7 +30,12 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+        </activity>
+        <activity
+            android:name=".AdminDashboard"
+            android:exported="true"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name=".UserAuthActivity"
             android:exported="true"
