@@ -1,8 +1,8 @@
 package com.example.govote;
 
+import android.app.Fragment;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,8 +38,8 @@ public class CandidateFragment extends Fragment {
         candidateList.add(new Candidate("Joe Biden","Senator of United States"));
         candidateList.add(new Candidate("Bikram Chand","Student of British"));
         candidateList.add(new Candidate("Mithun Chand","Student of Canvas"));
-        candidateAdapter=new CandidateAdapter(getActivity(),candidateList);
-        listView.setAdapter(candidateAdapter);
+      
+        //listView.setAdapter(candidateAdapter);
         return view;
     }
 }

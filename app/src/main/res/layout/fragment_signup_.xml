@@ -57,13 +57,14 @@
             android:id="@+id/textInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:hint="Email"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailEditTxt"
+                android:textSize="15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -78,7 +79,7 @@
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:hint="Password"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -87,7 +88,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/pwdEditTxt"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textSize="15sp"/>
         </com.google.android.material.textfield.TextInputLayout>
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signupBtn"

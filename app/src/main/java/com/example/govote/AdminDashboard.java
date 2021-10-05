@@ -34,7 +34,7 @@ public class AdminDashboard extends AppCompatActivity {
                         fragment=new AdminHomeFragment();
                         break;
                     case  R.id.vote_result:
-                        fragment=new ElectionFragment();
+                        fragment=new VoteResultFragment();
                         break;
                     case R.id.profile:
                         fragment=new UserSettingFragment();
