@@ -7,6 +7,7 @@
     android:background="#0041C4"
     tools:context=".Signup_Fragment">
     <ImageView
+        android:id="@+id/signupBackImage"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_arrow_back"
@@ -71,6 +72,29 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Re-enter Password"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:textSize="20sp"
+            android:textColor="#072755" />
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="Password"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reEnterPwdEditTxt"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Password"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="15dp"
@@ -82,15 +106,16 @@
             android:layout_height="60dp"
             android:hint="Password"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            >
+            android:layout_marginRight="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/pwdEditTxt"
+                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"/>
         </com.google.android.material.textfield.TextInputLayout>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signupBtn"
             android:layout_width="match_parent"
@@ -107,7 +132,7 @@
             android:textAllCaps="false"
             android:text="@string/register_title"/>
         <TextView
-            android:id="@+id/signupRedirect"
+            android:id="@+id/loginRedirect"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="bottom|center_horizontal"

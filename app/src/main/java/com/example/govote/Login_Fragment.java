@@ -46,22 +46,27 @@ public class Login_Fragment extends Fragment {
         mPassword=(EditText) view.findViewById(R.id.pwdEditTxt);
         mLoginBtn=(Button) view.findViewById(R.id.loginBtn);
         radioGroup=(RadioGroup) view.findViewById(R.id.radioGroup);
+
         mAuth=FirebaseAuth.getInstance();
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int selectedId=radioGroup.getCheckedRadioButtonId();
-                radioButton=(RadioButton) radioGroup.findViewById(selectedId);
-                final String value=radioButton.getText().toString();
-                Toast.makeText(getContext(), value, Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(getContext(), value, Toast.LENGTH_SHORT).show();
                 String email=mEmailId.getText().toString().trim();
                 String password=mPassword.getText().toString().trim();
                 User user;
-                if(!email.equals("") && !password.equals("")){
+                if(email.equals("") && password.equals("")){
+                    Toast.makeText(getContext(), "Please fill all the field", Toast.LENGTH_SHORT).show();
+                }else if(radioGroup.getCheckedRadioButtonId()==-1){
+                    Toast.makeText(getContext(), "Please select your role", Toast.LENGTH_SHORT).show();
+                }else{
+                    int selectedId=radioGroup.getCheckedRadioButtonId();
+                    radioButton=(RadioButton) radioGroup.findViewById(selectedId);
+
+                    final String value=radioButton.getText().toString();
                     user=new User(email,password,value);
                     fragmentListener.loginClicked(user);
-                }else{
-                    //Toast.makeText(getContext(), "Invalid credential", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -69,7 +74,7 @@ public class Login_Fragment extends Fragment {
         mSignupRedirect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((UserAuthActivity)getActivity()).replaceFragment();
+                ((UserAuthActivity)getActivity()).replaceFragment(new Signup_Fragment());
             }
         });
         mPwdResetTxt=(TextView) view.findViewById(R.id.forgetPwdTxt);

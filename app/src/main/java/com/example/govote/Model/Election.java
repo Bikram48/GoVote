@@ -4,6 +4,8 @@ public class Election {
     private String name;
     private String imageUrl;
     private String imageName;
+    private String startDate;
+    private String endDate;
     public Election(String name) {
         this.name = name;
     }
@@ -22,6 +24,30 @@ public class Election {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public Election(String name, String imageUrl, String imageName, String startDate, String endDate) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.imageName = imageName;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public Election(String name, String imageUrl, String imageName){

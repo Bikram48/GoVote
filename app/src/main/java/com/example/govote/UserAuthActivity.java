@@ -54,8 +54,8 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
         getSupportFragmentManager().beginTransaction().add(R.id.fragemtnContainer,fragment).addToBackStack(null).commit();
     }
 
-    public void replaceFragment(){
-        fragment=new Signup_Fragment();
+    public void replaceFragment(Fragment fragment){
+       // fragment=new Signup_Fragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragemtnContainer,fragment).addToBackStack(null).commit();
     }
 

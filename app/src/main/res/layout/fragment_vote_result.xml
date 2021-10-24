@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#0041C4"
     tools:context=".VoteResultFragment">
+
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,22 +17,70 @@
         android:textSize="40sp"
         android:textColor="@color/white"
         android:layout_marginTop="20dp"
-        android:textAlignment="center"/>
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/voteResultRecyclerView"
+        android:layout_marginLeft="10dp"/>
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-    </HorizontalScrollView>
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/barChart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/`election_result_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/layout_bg"
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/amaranth_bold"
+                    android:text="Voters Information"
+                    android:textColor="#072755"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/voteResultRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/amaranth_bold"
+                    android:text="Voting Result"
+                    android:textColor="#072755"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/resultRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center" />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/publishResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Publish Result"
+                    android:fontFamily="sans-serif"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:backgroundTint="#0041C4"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/signin_btn_bg"/>
+            </LinearLayout>
+        </ScrollView>
 </LinearLayout>

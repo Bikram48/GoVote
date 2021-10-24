@@ -16,13 +16,25 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/startDateTimePickerBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:text="Start Date and time"
+        android:onClick="showMinDateTimePicker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/electionName" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/chooseBannerBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="Choose File"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/electionName" />
+        app:layout_constraintTop_toBottomOf="@+id/startDateTimePickerBtn" />
 
     <EditText
         android:id="@+id/pictureName"
@@ -45,5 +57,16 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chooseBannerBtn" />
+
+    <Button
+        android:id="@+id/endDateTimePickerBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="End Date and Time"
+        android:onClick="showMaxDateTimePicker"
+        app:layout_constraintStart_toEndOf="@+id/startDateTimePickerBtn"
+        app:layout_constraintTop_toTopOf="@+id/startDateTimePickerBtn" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

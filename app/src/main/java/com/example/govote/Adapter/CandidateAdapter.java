@@ -121,23 +121,25 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.View
                 @Override
                 public void onSuccess(Void unused) {
 
-                    Map<String,Integer > voteCountList=new HashMap<>();
+                    Map<String,String > voteCountList=new HashMap<>();
                     count++;
                     //votingCountRef.child(candidate.getName()).setValue(voteCountList);
-                    votingCountRef.child(candidate.getName()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    votingCountRef.child(elctionCat).child(candidate.getName()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
                                 String voteCount= snapshot.child("count").getValue().toString();
                                 int votes=Integer.parseInt(voteCount);
                                 votes+=count;
-                                voteCountList.put("count",votes);
-                                votingCountRef.child(candidate.getName()).setValue(voteCountList);
+                                voteCountList.put("count",String.valueOf(votes));
+                                //voteCountList.put("election",elctionCat);
+                                votingCountRef.child(elctionCat).child(candidate.getName()).setValue(voteCountList);
                             }
                             else {
-                                Map<String,Integer > votecounter=new HashMap<>();
-                                votecounter.put("count",count);
-                                votingCountRef.child(candidate.getName()).setValue(votecounter);
+                                Map<String,String > votecounter=new HashMap<>();
+                                votecounter.put("count",String.valueOf(count));
+                               // votecounter.put("election",elctionCat);
+                                votingCountRef.child(elctionCat).child(candidate.getName()).setValue(votecounter);
                             }
                         }
 

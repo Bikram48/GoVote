@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PasswordReset_Fragment extends Fragment {
@@ -20,6 +21,7 @@ public class PasswordReset_Fragment extends Fragment {
     private Button mPwdResetBtn;
     private TextView mLoginRedirector;
     private  PasswordReset_Fragment.FragmentListener fragmentListener;
+    private ImageView resetBackImage;
     public PasswordReset_Fragment() {
         // Required empty public constructor
     }
@@ -32,6 +34,13 @@ public class PasswordReset_Fragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_password_reset_, container, false);
         mEmailId=(EditText) view.findViewById(R.id.emailEditTxt);
         mPwdResetBtn=(Button) view.findViewById(R.id.forgetpwdBtn);
+        resetBackImage=(ImageView) view.findViewById(R.id.resetBackImage);
+        resetBackImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((UserAuthActivity)getActivity()).replaceFragment(new Login_Fragment());
+            }
+        });
         mPwdResetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +67,7 @@ public class PasswordReset_Fragment extends Fragment {
         mLoginRedirector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                ((UserAuthActivity)getActivity()).replaceFragment(new Login_Fragment());
             }
         });
         return view;

@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.12447916666666667" />
         <entry key="app/src/main/res/drawable/arrow_drop_drown.xml" value="0.11875" />
         <entry key="app/src/main/res/drawable/candidate.xml" value="0.3260416666666667" />
         <entry key="app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.3260416666666667" />
@@ -24,13 +25,14 @@
         <entry key="app/src/main/res/layout/activity_user_setting.xml" value="0.25" />
         <entry key="app/src/main/res/layout/candidate_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/content_admin_dashboard.xml" value="0.14114583333333333" />
+        <entry key="app/src/main/res/layout/election_result_item.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/fragment_add_election.xml" value="0.2476489028213166" />
         <entry key="app/src/main/res/layout/fragment_admin_home.xml" value="0.29583333333333334" />
         <entry key="app/src/main/res/layout/fragment_candidate.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/fragment_candidates.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_election.xml" value="0.12760416666666666" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.25052083333333336" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/fragment_login_.xml" value="0.23025641025641025" />
         <entry key="app/src/main/res/layout/fragment_password_reset_.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_signup_.xml" value="0.25" />
