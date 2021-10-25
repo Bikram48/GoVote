@@ -13,7 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class AdminHomeFragment extends Fragment {
-    private FloatingActionButton mAddElectionBtn,mAddCandidateBtn;
+    private FloatingActionButton mAddElectionBtn,mAddCandidateBtn,mVoterInfoBtn;
     public AdminHomeFragment() {
         // Required empty public constructor
     }
@@ -26,6 +26,7 @@ public class AdminHomeFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_admin_home, container, false);
         mAddElectionBtn=(FloatingActionButton) view.findViewById(R.id.floatingActionButton1);
         mAddCandidateBtn=(FloatingActionButton) view.findViewById(R.id.floatingActionButton);
+        mVoterInfoBtn=(FloatingActionButton) view.findViewById(R.id.floatingActionButton4);
         mAddElectionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -38,6 +39,12 @@ public class AdminHomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getActivity().startActivity(new Intent(getActivity(),AddCandidateActivity.class));
+            }
+        });
+        mVoterInfoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().startActivity(new Intent(getActivity(),VoterInfoActivity.class));
             }
         });
         return view;

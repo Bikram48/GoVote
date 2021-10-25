@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.example.govote.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
@@ -44,8 +46,10 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
         FirebaseApp.initializeApp(UserAuthActivity.this);
         FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         if(firebaseUser!=null){
+
             startActivity(new Intent(UserAuthActivity.this,AdminDashboard.class));
         }
+
         addFragment();
     }
 
@@ -75,11 +79,25 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            databaseReference=FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            Map<String,String> userInfo=new HashMap<>();
-                            userInfo.put("email",email);
-                            userInfo.put("isUser","1");
-                            databaseReference.setValue(userInfo);
+                            mAuth.getCurrentUser()
+                                    .sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    databaseReference=FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                    Map<String,String> userInfo=new HashMap<>();
+                                    userInfo.put("email",email);
+                                    userInfo.put("isUser","1");
+                                    userInfo.put("isVerified","true");
+                                    databaseReference.setValue(userInfo);
+                                    Toast.makeText(UserAuthActivity.this, "Verification email has been sent", Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d("UserAuthActivity", "onFailure: Email not sent "+e.getMessage());
+                                }
+                            });
+
                         }else{
                             Toast.makeText(UserAuthActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -100,23 +118,27 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
     }
 
     public void userLogin(String email,String password,String userRole){
-        mAuth.signInWithEmailAndPassword(email,password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            if(userRole.equals("Admin")){
-                                Log.d("user_role", "admin or user: ");
-                                checkAdmin(mAuth.getCurrentUser().getUid());
-                            }
-                            if(userRole.equals("User")) {
-                                checkUserRole(mAuth.getCurrentUser().getUid());
-                            }
-                        }else{
-                            Toast.makeText(UserAuthActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        databaseReference=FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    mAuth.signInWithEmailAndPassword(email,password)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if(task.isSuccessful()){
+                                        if(userRole.equals("Admin")){
+                                            Log.d("user_role", "admin or user: ");
+                                            checkAdmin(mAuth.getCurrentUser().getUid());
+                                        }
+                                        if(userRole.equals("User")) {
+                                                checkUserRole(mAuth.getCurrentUser().getUid());
+                                        }
+                                    }else{
+                                        Toast.makeText(UserAuthActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
+
+
     }
 
     private void checkAdmin(String userId){
@@ -146,7 +168,11 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.hasChild("isUser")){
                     Log.d("userid", snapshot.getKey());
-                    startActivity(new Intent(UserAuthActivity.this,MainActivity.class));
+                    if(mAuth.getCurrentUser().isEmailVerified()) {
+                        startActivity(new Intent(UserAuthActivity.this, MainActivity.class));
+                    }else{
+                        Toast.makeText(UserAuthActivity.this, "Please verify your email first", Toast.LENGTH_SHORT).show();
+                    }
                 }
               else{
                     Toast.makeText(UserAuthActivity.this, "No user found", Toast.LENGTH_SHORT).show();

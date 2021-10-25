@@ -72,7 +72,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Re-enter Password"
+            android:text="Password"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="15dp"
             android:textSize="20sp"
@@ -95,7 +95,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Password"
+            android:text="Re-enter Password"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="15dp"
             android:textSize="20sp"

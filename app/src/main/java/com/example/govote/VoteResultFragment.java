@@ -60,7 +60,6 @@ public class VoteResultFragment extends Fragment implements View.OnClickListener
     private PieChart pieChart;
     private LinearLayout election_result_layout;
     private AppCompatButton publishResultBtn;
-    private RecyclerView voteResultDisplayerRV,piechartRV;
     private DatabaseReference databaseReference;
     private DatabaseReference voterReference;
     private String voterName;
@@ -98,10 +97,8 @@ public class VoteResultFragment extends Fragment implements View.OnClickListener
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_vote_result, container, false);
-        voteResultDisplayerRV=view.findViewById(R.id.voteResultRecyclerView);
         pieChart=view.findViewById(R.id.barChart);
         publishResultBtn=view.findViewById(R.id.publishResult);
-        piechartRV=view.findViewById(R.id.resultRecyclerView);
         election_result_layout=view.findViewById(R.id.election_result_layout);
         voteResults=new ArrayList<>();
        // jobDispatcher=new FirebaseJobDispatcher(new GooglePlayDriver(getContext()));
@@ -250,27 +247,7 @@ public class VoteResultFragment extends Fragment implements View.OnClickListener
 
                         }
                     });
-                    voterReference.child(dataSnapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot1) {
-                            voterName=snapshot1.child("email").getValue().toString();
-                            voteInfo.setVoterName(snapshot1.child("email").getValue().toString());
-                            voteInfo.setCandidateName(dataSnapshot.child("candidateName").getValue().toString());
-                            voteInfo.setPosition(dataSnapshot.child("election").getValue().toString());
-                            voteInfoList.add(voteInfo);
-                            Log.d("allvalues", "onDataChange: "+voterName);
-                            LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
-                            voteResultDisplayerRV.setLayoutManager(linearLayoutManager);
-                            VotingResultAdapter votingResultAdapter=new VotingResultAdapter(getContext(),voteInfoList);
-                            voteResultDisplayerRV.setAdapter(votingResultAdapter);
-                           // Log.d("allvalues", "onDataChange: "+snapshot1.child("email").getValue());
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
 
                 }
 

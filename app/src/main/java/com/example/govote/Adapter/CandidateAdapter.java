@@ -113,6 +113,7 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.View
                 mVoteBtn.setEnabled(false);
                 candidate.setClicked(true);
             }
+
             count=0;
             Map<String,String > voteInfo=new HashMap<>();
             voteInfo.put("candidateName",candidate.getName());
@@ -132,12 +133,14 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.View
                                 int votes=Integer.parseInt(voteCount);
                                 votes+=count;
                                 voteCountList.put("count",String.valueOf(votes));
+                               // voteCountList.put("userid",FirebaseAuth.getInstance().getCurrentUser().getUid());
                                 //voteCountList.put("election",elctionCat);
                                 votingCountRef.child(elctionCat).child(candidate.getName()).setValue(voteCountList);
                             }
                             else {
                                 Map<String,String > votecounter=new HashMap<>();
                                 votecounter.put("count",String.valueOf(count));
+                               // voteCountList.put("userid",FirebaseAuth.getInstance().getCurrentUser().getUid());
                                // votecounter.put("election",elctionCat);
                                 votingCountRef.child(elctionCat).child(candidate.getName()).setValue(votecounter);
                             }
