@@ -47,7 +47,7 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
         FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         if(firebaseUser!=null){
 
-            startActivity(new Intent(UserAuthActivity.this,AdminDashboard.class));
+            startActivity(new Intent(UserAuthActivity.this,MainActivity.class));
         }
 
         addFragment();
@@ -118,7 +118,7 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
     }
 
     public void userLogin(String email,String password,String userRole){
-        databaseReference=FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        //databaseReference=FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
                     mAuth.signInWithEmailAndPassword(email,password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override

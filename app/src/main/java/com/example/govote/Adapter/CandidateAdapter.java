@@ -48,7 +48,7 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.View
         this.elctionCat=electionCat;
         this.candidateList=candidateList;
         votingCountRef=FirebaseDatabase.getInstance().getReference("VoteCount");
-        votingRef= FirebaseDatabase.getInstance().getReference("Vote").child(firebaseAuth.getCurrentUser().getUid());
+        votingRef= FirebaseDatabase.getInstance().getReference("Vote").child(firebaseAuth.getCurrentUser().getUid()).child(electionCat);
     }
 
 
@@ -94,6 +94,28 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.View
             candidateDescription= (TextView) listItemView.findViewById(R.id.candidate_description);
             candidatePicture=(CircleImageView) listItemView.findViewById(R.id.candidatePicture);
             mVoteBtn=(MaterialButton) listItemView.findViewById(R.id.voteBtn);
+            votingRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        if(snapshot.getKey().equals(elctionCat)){
+                            String candidate=snapshot.child("candidateName").getValue().toString();
+                            if(candidate.equals(candidateName.getText().toString())){
+                                mVoteBtn.setText("Voted");
+                            }else {
+                                mVoteBtn.setText("Vote Now");
+                                mVoteBtn.setEnabled(false);
+                                // candidate.setClicked(true);
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
             mVoteBtn.setOnClickListener(this::onClick);
 
         }
@@ -109,51 +131,52 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.View
                 mVoteBtn.setEnabled(true);
                 candidate.setClicked(false);
             }else{
-                mVoteBtn.setText("Voted");
-                mVoteBtn.setEnabled(false);
-                candidate.setClicked(true);
+                count=0;
+                Map<String,String > voteInfo=new HashMap<>();
+                voteInfo.put("candidateName",candidate.getName());
+                voteInfo.put("election",elctionCat);
+
+                votingRef.setValue(voteInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+
+                        Map<String,String > voteCountList=new HashMap<>();
+                        count++;
+                        //votingCountRef.child(candidate.getName()).setValue(voteCountList);
+                        votingCountRef.child(elctionCat).child(candidate.getName()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(snapshot.exists()){
+                                    String voteCount= snapshot.child("count").getValue().toString();
+                                    int votes=Integer.parseInt(voteCount);
+                                    votes+=count;
+                                    voteCountList.put("count",String.valueOf(votes));
+                                    // voteCountList.put("userid",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                    //voteCountList.put("election",elctionCat);
+                                    votingCountRef.child(elctionCat).child(candidate.getName()).setValue(voteCountList);
+                                }
+                                else {
+                                    Map<String,String > votecounter=new HashMap<>();
+                                    votecounter.put("count",String.valueOf(count));
+                                    // voteCountList.put("userid",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                    // votecounter.put("election",elctionCat);
+                                    votingCountRef.child(elctionCat).child(candidate.getName()).setValue(votecounter);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
+
+                    }
+                });
+
             }
 
-            count=0;
-            Map<String,String > voteInfo=new HashMap<>();
-            voteInfo.put("candidateName",candidate.getName());
-            voteInfo.put("election",elctionCat);
-            votingRef.setValue(voteInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
 
-                    Map<String,String > voteCountList=new HashMap<>();
-                    count++;
-                    //votingCountRef.child(candidate.getName()).setValue(voteCountList);
-                    votingCountRef.child(elctionCat).child(candidate.getName()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.exists()){
-                                String voteCount= snapshot.child("count").getValue().toString();
-                                int votes=Integer.parseInt(voteCount);
-                                votes+=count;
-                                voteCountList.put("count",String.valueOf(votes));
-                               // voteCountList.put("userid",FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                //voteCountList.put("election",elctionCat);
-                                votingCountRef.child(elctionCat).child(candidate.getName()).setValue(voteCountList);
-                            }
-                            else {
-                                Map<String,String > votecounter=new HashMap<>();
-                                votecounter.put("count",String.valueOf(count));
-                               // voteCountList.put("userid",FirebaseAuth.getInstance().getCurrentUser().getUid());
-                               // votecounter.put("election",elctionCat);
-                                votingCountRef.child(elctionCat).child(candidate.getName()).setValue(votecounter);
-                            }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
-                    });
-
-                }
-            });
 
         }
     }
