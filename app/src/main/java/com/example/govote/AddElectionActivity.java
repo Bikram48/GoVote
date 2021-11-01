@@ -17,29 +17,38 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.govote.Model.Election;
+import com.example.govote.Service.MyReceiver;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class AddElectionActivity extends AppCompatActivity {
     private EditText electionName;
-    private AppCompatButton chooseBannerBtn,submitBtn,dateTimePickerBtn;
+    private AppCompatButton chooseBannerBtn,submitBtn;
+    private Button endDateTimePickerBtn;
     private EditText pictureName;
+    private  String uploadId;
     public static final int PICK_IMAGE_REQUEST=1;
     private Uri mImageUri;
     private StorageReference storageReference;
@@ -56,7 +65,7 @@ public class AddElectionActivity extends AppCompatActivity {
         chooseBannerBtn=(AppCompatButton) findViewById(R.id.chooseBannerBtn);
         pictureName=(EditText) findViewById(R.id.pictureName);
         submitBtn=(AppCompatButton) findViewById(R.id.submitBtn);
-        dateTimePickerBtn=(AppCompatButton) findViewById(R.id.startDateTimePickerBtn);
+        endDateTimePickerBtn=findViewById(R.id.endDateTimePickerBtn);
         storageReference= FirebaseStorage.getInstance().getReference("uploads");
         databaseReference= FirebaseDatabase.getInstance().getReference("Election");
         chooseBannerBtn.setOnClickListener(new View.OnClickListener() {
@@ -111,12 +120,16 @@ public class AddElectionActivity extends AppCompatActivity {
                     fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
+
                             Election election=new Election(electionName.getText().toString().trim()
-                                    ,uri.toString(),pictureName.getText().toString(),startDate,endDate);
-                            String uploadId=databaseReference.push().getKey();
+                                    ,uri.toString(),pictureName.getText().toString(),endDate,"N");
+                            uploadId=databaseReference.push().getKey();
+                            setAlaram(electionName.getText().toString().trim()+" has ended.",endDate);
                             databaseReference.child(uploadId).setValue(election).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
+
+
                                     /*
                                     AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
                                     Intent alarmShowIntent = new Intent(AddElectionActivity.this, BroadcastManager.class);
@@ -145,8 +158,35 @@ public class AddElectionActivity extends AppCompatActivity {
             Toast.makeText(AddElectionActivity.this, "Please select file first!", Toast.LENGTH_SHORT).show();
         }
     }
+    public void showMaxDateTimePicker(View view){
+        final Calendar currentDate = Calendar.getInstance();
+        new DatePickerDialog(AddElectionActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                date.set(year, monthOfYear, dayOfMonth);
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yyyy hh:mm");
+                //FirebaseDatabase.getInstance().getReference().child("date").
 
 
+                //Log.d("DateTime", "onDateSet: "+selectedDate);
+
+                new TimePickerDialog(AddElectionActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        date.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        date.set(Calendar.MINUTE, minute);
+
+                        Log.v("alarm_manager", "The choosen one " + date.getTime());
+                        endDate=simpleDateFormat.format(date.getTime());
+                        endDateTimePickerBtn.setText(endDate);
+                    }
+                }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), false).show();
+
+            }
+        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
+
+    }
+    /*
     public void showMaxDateTimePicker(View view) {
         final Calendar currentDate = Calendar.getInstance();
 
@@ -166,7 +206,7 @@ public class AddElectionActivity extends AppCompatActivity {
                         endDate=simpleDateFormat.format(date.getTime());
                         date_maximal=date.getTime();
                         Log.d("DateTime", "onDateSet: "+endDate);
-                        dateTimePickerBtn.setText(endDate);
+                        endDateTimePickerBtn.setText(endDate);
 
 
                         Log.v("datetime", "The choosen one " + date.getTime());
@@ -176,27 +216,37 @@ public class AddElectionActivity extends AppCompatActivity {
         }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
     }
 
-    public void showMinDateTimePicker(View view){
-        final Calendar currentDate = Calendar.getInstance();
-        new DatePickerDialog(AddElectionActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                date.set(year, monthOfYear, dayOfMonth);
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yyyy HH:MM:SS");
-                //FirebaseDatabase.getInstance().getReference().child("date").
-                startDate=simpleDateFormat.format(date.getTime());
-                date_minimal=date.getTime();
-                //Log.d("DateTime", "onDateSet: "+selectedDate);
-                dateTimePickerBtn.setText(startDate);
-                new TimePickerDialog(AddElectionActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        date.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        date.set(Calendar.MINUTE, minute);
-                        // Log.v(TAG, "The choosen one " + date.getTime());
-                    }
-                }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), false).show();
-            }
-        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
+     */
+
+
+    public void setAlaram(String message, String date) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra("message", message);
+        intent.putExtra("uploadId",uploadId);
+        Log.d("AdminDashboard", "setAlaram: "+uploadId);
+        // intent.putExtra("time", time);
+        //intent.putExtra("data", date);
+        PendingIntent pendingIntent;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getBroadcast
+                    (this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
+        }
+        else
+        {
+            pendingIntent = PendingIntent.getActivity
+                    (this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        }
+        //PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        //String dateandtime = date + " " + time;
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+        try {
+            Date date1 = formatter.parse(date);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
+            Log.d("alaram_manager", "setAlaram: "+date1.getMinutes());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }

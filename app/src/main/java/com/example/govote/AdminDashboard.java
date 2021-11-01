@@ -41,22 +41,23 @@ public class AdminDashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
         bottomNavigationView=findViewById(R.id.bottomNavigation);
-        scheduleJob();
-        FirebaseDatabase.getInstance().getReference("Election").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    scheduleJob();
-                }else{
-                    cancelJob();
-                }
-            }
+    /*
+        if(getIntent().getStringExtra("id")!=null) {
+           // String message = getIntent().getStringExtra("isEnded");
+            String uploadId = getIntent().getStringExtra("id");
+            Log.d(TAG, "onCreate: " + uploadId);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                FirebaseDatabase.getInstance().getReference("Election").child(uploadId)
+                        .child("isEnded").setValue("Y");
 
-            }
-        });
+
+
+
+
+
+        }
+
+     */
         getSupportFragmentManager().beginTransaction().replace(R.id.container,new AdminHomeFragment()).commit();
         bottomNavigationView.setSelectedItemId(R.id.home);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
@@ -80,37 +81,23 @@ public class AdminDashboard extends AppCompatActivity {
         });
 
     }
-    public void scheduleJob(){
-        ComponentName componentName=new ComponentName(this, MyService.class);
-        String dateandtime="05-10-2021"+" "+"9:31";
-        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:MM");
-        try {
-            Date date1 = formatter.parse(dateandtime);
-            JobInfo jobInfo=new JobInfo.Builder(JOB_ID,componentName)
-                    .setPersisted(true)
-                    .setRequiresCharging(false)
-                    .setPeriodic(15*60*1000)
-                    .build();
-            Log.d(TAG, "scheduleJob: "+date1);
-            JobScheduler jobScheduler=(JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-            int resultCode=jobScheduler.schedule(jobInfo);
-            if(resultCode==JobScheduler.RESULT_SUCCESS)
-                Log.d(TAG, "Job Scheduled..");
-            else
-                System.out.println("Job Scheduler failed..");
-        }catch (ParseException e){
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Bundle extras = intent.getExtras();
+        if(extras != null){
+            if(extras.containsKey("id"))
+            {
+                String uploadId=extras.getString("id");
+
+                FirebaseDatabase.getInstance().getReference("Election").child(uploadId)
+                        .child("isEnded").setValue("Y");
+
+                Log.d(TAG, "onCreate: " + uploadId);
+            }
         }
-
-
     }
-
-    public void cancelJob(){
-        JobScheduler jobScheduler=(JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        jobScheduler.cancel(JOB_ID);
-        Log.d(TAG, "Job has been canceled ");
-    }
-
 
     public void replaceFragments(Fragment fragment) {
         // Insert the fragment by replacing any existing fragment

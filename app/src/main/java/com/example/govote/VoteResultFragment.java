@@ -176,24 +176,6 @@ public class VoteResultFragment extends Fragment implements View.OnClickListener
                                 election_result_layout.addView(newCard);
                             }
                         }
-                        /*
-                        voteResultDisplayAdapter=new VoteResultDisplayAdapter(getContext(),voteResults);
-                        piechartRV.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-                        piechartRV.setAdapter(voteResultDisplayAdapter);
-
-                         */
-                        /*
-                        PieDataSet barDataSet=new PieDataSet(pieEntries,"VoteResult");
-                        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-                        barDataSet.setValueTextColor(Color.BLACK);
-                        barDataSet.setValueTextSize(16f);
-                        PieData pieData=new PieData(barDataSet);
-                        pieChart.setData(pieData);
-                        pieChart.getDescription().setEnabled(false);
-                        pieChart.setCenterText("Voting Result");
-                        pieChart.animate();
-
-                         */
 
                     }
 
@@ -204,7 +186,7 @@ public class VoteResultFragment extends Fragment implements View.OnClickListener
                 });
 
 
-        getInfo();
+        //getInfo();
         return view;
     }
 
