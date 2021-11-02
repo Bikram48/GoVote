@@ -37,6 +37,7 @@ import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +48,8 @@ public class HomeFragment extends Fragment {
     private TextView electionResultTitle;
     private DatabaseReference voteReference,electionReference;
     SliderView sliderView;
-    private ArrayList<String>  elctionList;
+    private ArrayList<String>  elctionList,electionNameList;
+
     private String status;
     private LinearLayout publishedResultLayout;
     int[] images = {R.mipmap.voting1,
@@ -64,6 +66,7 @@ public class HomeFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_home, container, false);
         voteResults=new ArrayList<>();
         elctionList=new ArrayList<>();
+        electionNameList=new ArrayList<>();
         publishedResultLayout=view.findViewById(R.id.published_result);
         electionResultTitle=view.findViewById(R.id.textView9);
         sliderView = view.findViewById(R.id.image_slider);
@@ -75,7 +78,7 @@ public class HomeFragment extends Fragment {
                 if(snapshot.exists()) {
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                          String electionName = snapshot1.getKey().toString();
-                        Log.d("HomeFragment", "name: "+electionName);
+                        Log.d("HomeFragment", "firstname: "+electionName);
                         elctionList.add(electionName);
                     }
                     electionReference=FirebaseDatabase.getInstance().getReference("Election");
@@ -122,89 +125,120 @@ public class HomeFragment extends Fragment {
     }
 
     public void electionResult(){
-        FirebaseDatabase.getInstance().getReference("VoteCount")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot2) {
-                        if(snapshot2.exists()){
-                            for(DataSnapshot snapshot:snapshot2.getChildren()){
-                                CardView newCard = new CardView(getActivity().getApplicationContext());
-                                PieChart pieChart = new PieChart(getActivity().getApplicationContext());
-                                pieChart.setId(View.generateViewId());
-                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(800, 300);
-                                pieChart.setLayoutParams(layoutParams);
-                                pieChart.getDescription().setEnabled(false);
-                                pieChart.setRotationEnabled(true);
-                                pieChart.setDragDecelerationFrictionCoef(0.9f);
-                                pieChart.setRotationAngle(0);
-                                pieChart.setHighlightPerTapEnabled(true);
-                                //adding animation so the entries pop up from 0 degree
-                                pieChart.animateY(1400, Easing.EaseInOutQuad);
-                                //setting the color of the hole in the middle, default white
-                                pieChart.setHoleColor(Color.parseColor("#0f0f0f"));
-                                String label = "Candidates";
-                                Map<String, Integer> typeAmountMap = new HashMap<>();
-                                LinearLayout newLinearLayout = new LinearLayout(getActivity().getApplicationContext());
-                                newLinearLayout.setOrientation(LinearLayout.VERTICAL);
-                                newCard.setCardElevation(15);
-                                newCard.setContentPadding(15,15,15,15);
-                                newCard.setRadius(10);
-                                newCard.setPreventCornerOverlap(true);
-                                newCard.setUseCompatPadding(true);
-                                newCard.setMaxCardElevation(20);
-                                TextView electionNameTxt = new TextView(getActivity().getApplicationContext());
-                                electionNameTxt.setTextSize(12f);
-                                electionNameTxt.setGravity(Gravity.CENTER_HORIZONTAL);
-                                electionNameTxt.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
-                                electionNameTxt.setTypeface(null, Typeface.BOLD);
-                                TextView candidateTxtView = new TextView(getActivity().getApplicationContext());
-                                ArrayList<PieEntry> pieEntries=new ArrayList<PieEntry>();
-                                for(DataSnapshot snapshot1:snapshot.getChildren()) {
+        voteReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        String electionName = snapshot1.getKey().toString();
+                        Log.d("HomeFragment", "firstname: " + electionName);
+                        electionNameList.add(electionName);
+                    }
+                    FirebaseDatabase.getInstance().getReference("VoteCount")
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()){
+                                        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                            String name = snapshot1.getKey().toString();
+                                            if (electionNameList.contains(name)) {
+                                                CardView newCard = new CardView(getContext());
+                                                PieChart pieChart = new PieChart(getContext());
+                                                pieChart.setId(View.generateViewId());
+                                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(800, 300);
+                                                pieChart.setLayoutParams(layoutParams);
+                                                pieChart.getDescription().setEnabled(false);
+                                                pieChart.setRotationEnabled(true);
+                                                pieChart.setDragDecelerationFrictionCoef(0.9f);
+                                                pieChart.setRotationAngle(0);
+                                                pieChart.setHighlightPerTapEnabled(true);
+                                                //adding animation so the entries pop up from 0 degree
+                                                pieChart.animateY(1400, Easing.EaseInOutQuad);
+                                                //setting the color of the hole in the middle, default white
+                                                pieChart.setHoleColor(Color.parseColor("#0f0f0f"));
+                                                String label = "";
+                                                Map<String, Integer> typeAmountMap = new HashMap<>();
+                                                LinearLayout newLinearLayout = new LinearLayout(getContext());
+                                                newLinearLayout.setOrientation(LinearLayout.VERTICAL);
+                                                newCard.setCardElevation(15);
+                                                newCard.setContentPadding(15, 15, 15, 15);
+                                                newCard.setRadius(10);
+                                                newCard.setPreventCornerOverlap(true);
+                                                newCard.setUseCompatPadding(true);
+                                                newCard.setMaxCardElevation(20);
+                                                TextView electionNameTxt = new TextView(getContext());
+                                                electionNameTxt.setTextSize(12f);
+                                                electionNameTxt.setGravity(Gravity.CENTER_HORIZONTAL);
+                                                electionNameTxt.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
+                                                electionNameTxt.setTypeface(null, Typeface.BOLD);
+                                                TextView candidateTxtView = new TextView(getContext());
+                                                TextView voteResultTxtView = new TextView(getContext());
+                                                ArrayList<PieEntry> pieEntries = new ArrayList<PieEntry>();
 
-                                    candidates.add(snapshot1.getKey().toString());
-                                    String voteCount = snapshot1.child("count").getValue().toString();
-                                    int counts = Integer.parseInt(voteCount);
-                                    String election = snapshot.getKey().toString();
-                                    String candidate = snapshot1.getKey();
-                                    voteResults.add(new VoteResult(counts, election, candidate));
-                                    pieEntries.add(new PieEntry(counts,snapshot1.getKey()));
-                                    electionNameTxt.setText(election);
-                                    //electionNameTxt.setTextSize(30);
-                                    // typeAmountMap.put(candidates.get(i),Integer.parseInt(votes));
-                                    //collecting the entries with label name
+                                                for (DataSnapshot snapshot2 : snapshot1.getChildren()) {
+                                                    candidates.add(snapshot2.getKey().toString());
+                                                    String voteCount = snapshot2.child("count").getValue().toString();
+                                                    int counts = Integer.parseInt(voteCount);
+                                                    String election = snapshot1.getKey().toString();
+                                                    String candidate = snapshot2.getKey();
+                                                    voteResults.add(new VoteResult(counts, election, candidate));
+                                                    pieEntries.add(new PieEntry(counts, snapshot2.getKey()));
+                                                    electionNameTxt.setText(election);
+                                                    //electionNameTxt.setTextSize(30);
+                                                    // typeAmountMap.put(candidates.get(i),Integer.parseInt(votes));
+                                                    //collecting the entries with label name
+
+                                                }
+                                                VoteResult max = Collections.max(voteResults);
+
+                                                newLinearLayout.addView(electionNameTxt);
+                                                PieDataSet pieDataSet = new PieDataSet(pieEntries, label);
+                                                //setting text size of the value
+                                                pieDataSet.setValueTextSize(12f);
+                                                //providing color list for coloring different entries
+                                                pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                                                //grouping the data set from entry to chart
+                                                PieData pieData = new PieData(pieDataSet);
+                                                //showing the value of the entries, default true if not set
+                                                pieData.setDrawValues(true);
+                                                pieChart.setData(pieData);
+                                                pieChart.invalidate();
+                                                candidateTxtView.setTextSize(12);
+                                                voteResultTxtView.setText(max.getCandidate()+" has win the election by "+max.getVoteCount()+" votes");
+                                                voteResultTxtView.setTextSize(10);
+                                                voteResultTxtView.setGravity(Gravity.CENTER_HORIZONTAL);
+                                                voteResultTxtView.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
+                                                voteResultTxtView.setTypeface(null, Typeface.BOLD);
+                                                newLinearLayout.addView(candidateTxtView);
+                                                newLinearLayout.addView(voteResultTxtView);
+                                                newLinearLayout.addView(pieChart);
+                                                newLinearLayout.setPadding(5, 5, 5, 5);
+                                                newCard.addView(newLinearLayout);
+                                                newLinearLayout.setBackgroundColor(Color.parseColor("#ffffff"));
+                                                publishedResultLayout.addView(newCard);
+                                                publishedResultLayout.setVisibility(View.VISIBLE);
+                                                electionResultTitle.setVisibility(View.VISIBLE);
+
+                                            }
+                                        }
+                                }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
                                 }
-                                newLinearLayout.addView(electionNameTxt);
-                                PieDataSet pieDataSet = new PieDataSet(pieEntries,label);
-                                //setting text size of the value
-                                pieDataSet.setValueTextSize(12f);
-                                //providing color list for coloring different entries
-                                pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-                                //grouping the data set from entry to chart
-                                PieData pieData = new PieData(pieDataSet);
-                                //showing the value of the entries, default true if not set
-                                pieData.setDrawValues(true);
-                                pieChart.setData(pieData);
-                                pieChart.invalidate();
-                                candidateTxtView.setTextSize(12);
-                                newLinearLayout.addView(candidateTxtView);
-                                newLinearLayout.addView(pieChart);
-                                newLinearLayout.setPadding(5,5,5,5);
-                                newCard.addView(newLinearLayout);
-                                newLinearLayout.setBackgroundColor(Color.parseColor("#ffffff"));
-                                publishedResultLayout.addView(newCard);
-                                publishedResultLayout.setVisibility(View.VISIBLE);
-                                electionResultTitle.setVisibility(View.VISIBLE);
-                            }
-                        }
+                            });
+                }
+            }
 
-                    }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
 
-                    }
-                });
 
     }
+
 }

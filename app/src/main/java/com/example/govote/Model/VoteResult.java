@@ -1,6 +1,6 @@
 package com.example.govote.Model;
 
-public class VoteResult {
+public class VoteResult implements Comparable<VoteResult>{
     private int voteCount;
     private String election;
     private String candidate;
@@ -33,5 +33,15 @@ public class VoteResult {
 
     public void setElection(String election) {
         this.election = election;
+    }
+
+    @Override
+    public int compareTo(VoteResult voteResult) {
+        if (this.getVoteCount() > voteResult.getVoteCount()) {
+            return 1;
+        } else if (this.getVoteCount() < voteResult.getVoteCount()) {
+            return -1;
+        }
+        return 0;
     }
 }

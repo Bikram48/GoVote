@@ -168,11 +168,15 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.hasChild("isUser")){
                     Log.d("userid", snapshot.getKey());
+                    startActivity(new Intent(UserAuthActivity.this, MainActivity.class));
+                    /*
                     if(mAuth.getCurrentUser().isEmailVerified()) {
                         startActivity(new Intent(UserAuthActivity.this, MainActivity.class));
                     }else{
                         Toast.makeText(UserAuthActivity.this, "Please verify your email first", Toast.LENGTH_SHORT).show();
                     }
+
+                     */
                 }
               else{
                     Toast.makeText(UserAuthActivity.this, "No user found", Toast.LENGTH_SHORT).show();
