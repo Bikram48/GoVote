@@ -17,9 +17,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -40,6 +43,7 @@ import com.google.firebase.storage.UploadTask;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -51,10 +55,13 @@ public class AddElectionActivity extends AppCompatActivity {
     private  String uploadId;
     public static final int PICK_IMAGE_REQUEST=1;
     private Uri mImageUri;
+    private Spinner spinner;
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
     private StorageTask storageTask;
+    private String electionType;
     private String startDate,endDate;
+    private ArrayList<String> dropdownItems=new ArrayList<>();
     Date date_minimal,date_maximal;
     Calendar  date = Calendar.getInstance();
     @Override
@@ -65,7 +72,25 @@ public class AddElectionActivity extends AppCompatActivity {
         chooseBannerBtn=(AppCompatButton) findViewById(R.id.chooseBannerBtn);
         pictureName=(EditText) findViewById(R.id.pictureName);
         submitBtn=(AppCompatButton) findViewById(R.id.submitBtn);
+        spinner=(Spinner) findViewById(R.id.spinner);
         endDateTimePickerBtn=findViewById(R.id.endDateTimePickerBtn);
+        dropdownItems.add("sga");
+        dropdownItems.add("other");
+        // ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(AddCandidateActivity.this, android.R.layout.simple_spinner_dropdown_item,dropdownItems);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(AddElectionActivity.this, android.R.layout.simple_spinner_dropdown_item, dropdownItems);
+//set the spinners adapter to the previously created one.
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                electionType=(String) adapterView.getItemAtPosition(i).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         storageReference= FirebaseStorage.getInstance().getReference("uploads");
         databaseReference= FirebaseDatabase.getInstance().getReference("Election");
         chooseBannerBtn.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +147,7 @@ public class AddElectionActivity extends AppCompatActivity {
                         public void onSuccess(Uri uri) {
 
                             Election election=new Election(electionName.getText().toString().trim()
-                                    ,uri.toString(),pictureName.getText().toString(),endDate,"N");
+                                    ,uri.toString(),pictureName.getText().toString(),endDate,"N",electionType);
                             uploadId=databaseReference.push().getKey();
                             setAlaram(electionName.getText().toString().trim()+" has ended.",endDate);
                             databaseReference.child(uploadId).setValue(election).addOnSuccessListener(new OnSuccessListener<Void>() {
