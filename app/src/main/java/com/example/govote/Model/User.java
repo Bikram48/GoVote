@@ -3,11 +3,22 @@ package com.example.govote.Model;
 public class User {
     private String email;
     private String password;
+    private String phoneNumber;
     private String userRole;
 
-    public User(String email, String password, String userRole) {
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public User(String email, String password, String phoneNumber, String userRole) {
         this.email = email;
         this.password = password;
+        this.phoneNumber=phoneNumber;
         this.userRole=userRole;
     }
 

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OTPCodeActivity"
+
+    android:padding="20dp"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/bungee"
+        android:text="Please enter the secret code we just sent you."
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/black" />
+
+    <com.chaos.view.PinView
+        android:id="@+id/otpcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        app:itemRadius="10dp"
+        app:itemCount="6"
+        android:inputType="number"
+        android:cursorVisible="true"
+        app:lineColor="@color/red"
+        app:cursorColor="@color/red"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:itemBackground="@color/white"
+        android:textColor="@color/black"
+        app:viewType="rectangle"
+        app:itemWidth="45dp"
+        app:itemHeight="70dp"
+        app:hideLineWhenFilled="false"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/submitBtn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/black"
+        android:text="SUBMIT"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/white"/>
+    <ProgressBar
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:visibility="gone"
+        android:layout_gravity="center"/>
+</LinearLayout>

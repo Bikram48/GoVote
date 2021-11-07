@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.example.govote.Model.User;
 
 public class Signup_Fragment extends Fragment {
-    private EditText mEmailId,mPassword,mRePassword;
+    private EditText mEmailId,mPassword,mRePassword,mPhoneNumber;
     private Button mSignupBtn;
     private FragmentListener fragmentListener;
     private TextView loginRedirectTxtView;
@@ -40,12 +40,14 @@ public class Signup_Fragment extends Fragment {
         loginRedirectTxtView=(TextView) view.findViewById(R.id.loginRedirect);
         mSignupBackImage=(ImageView) view.findViewById(R.id.signupBackImage);
         mRePassword=(EditText) view.findViewById(R.id.reEnterPwdEditTxt);
+        mPhoneNumber=(EditText) view.findViewById(R.id.phoneEditTxt);
         mSignupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String emailId=mEmailId.getText().toString().trim();
                 String password=mPassword.getText().toString().trim();
                 String rePassword=mRePassword.getText().toString().trim();
+                String phone=mPhoneNumber.getText().toString().trim();
                 User user;
                 if (emailId.equals("")|| password.equals("")||rePassword.equals("")) {
                     Toast.makeText(getContext(), "Please fill all the field", Toast.LENGTH_SHORT).show();
@@ -53,7 +55,7 @@ public class Signup_Fragment extends Fragment {
                     Toast.makeText(getContext(), "Password didn't matched", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    user=new User(emailId,password,"1");
+                    user=new User(emailId,password,phone,"1");
                     fragmentListener.createAccountClicked(user);
                     //Toast.makeText(getContext(), "invalid email or password", Toast.LENGTH_LONG).show();
                 }

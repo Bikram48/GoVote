@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:scrollbars="vertical">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -68,6 +72,28 @@
                 android:textSize="15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phone Number"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:textSize="20sp"
+            android:textColor="#072755" />
+        <com.google.android.material.textfield.TextInputLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Phone Number">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/phoneEditTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"/>
         </com.google.android.material.textfield.TextInputLayout>
         <TextView
             android:layout_width="wrap_content"
@@ -145,3 +171,4 @@
     </LinearLayout>
 
 </LinearLayout>
+</ScrollView>

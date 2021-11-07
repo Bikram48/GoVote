@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ public class Login_Fragment extends Fragment {
     private FragmentListener fragmentListener;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
+    private DatabaseReference userReference;
     FirebaseAuth mAuth;
     public Login_Fragment() {
         // Required empty public constructor
@@ -46,7 +48,7 @@ public class Login_Fragment extends Fragment {
         mPassword=(EditText) view.findViewById(R.id.pwdEditTxt);
         mLoginBtn=(Button) view.findViewById(R.id.loginBtn);
         radioGroup=(RadioGroup) view.findViewById(R.id.radioGroup);
-
+        userReference=FirebaseDatabase.getInstance().getReference("Users");
         mAuth=FirebaseAuth.getInstance();
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +57,7 @@ public class Login_Fragment extends Fragment {
                 //Toast.makeText(getContext(), value, Toast.LENGTH_SHORT).show();
                 String email=mEmailId.getText().toString().trim();
                 String password=mPassword.getText().toString().trim();
-                User user;
+                //User user;
                 if(email.equals("") && password.equals("")){
                     Toast.makeText(getContext(), "Please fill all the field", Toast.LENGTH_SHORT).show();
                 }else if(radioGroup.getCheckedRadioButtonId()==-1){
@@ -65,8 +67,26 @@ public class Login_Fragment extends Fragment {
                     radioButton=(RadioButton) radioGroup.findViewById(selectedId);
 
                     final String value=radioButton.getText().toString();
-                    user=new User(email,password,value);
-                    fragmentListener.loginClicked(user);
+                    userReference.orderByChild("email").equalTo(email)
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if(snapshot.exists()){
+                                        for(DataSnapshot snapshot1:snapshot.getChildren()) {
+                                            String phone = snapshot1.child("phone").getValue().toString();
+                                            Log.d("login_fragment", "phone: " + phone);
+                                            User user = new User(email, password, phone, value);
+                                            fragmentListener.loginClicked(user);
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
                 }
             }
         });

@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AdminDashboard extends AppCompatActivity {
     public static final String TAG="AdminDashboard";
+    private DatabaseReference voteReference,electionReference,voteCountReference,userReference;
     private BottomNavigationView bottomNavigationView;
     private DatabaseReference databaseReference;
     private static final int JOB_ID=123;

@@ -70,8 +70,10 @@ public class HomeFragment extends Fragment {
         publishedResultLayout=view.findViewById(R.id.published_result);
         electionResultTitle=view.findViewById(R.id.textView9);
         sliderView = view.findViewById(R.id.image_slider);
-        voteReference=FirebaseDatabase.getInstance().getReference("Vote")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
+            voteReference = FirebaseDatabase.getInstance().getReference("Vote")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        }
         voteReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
