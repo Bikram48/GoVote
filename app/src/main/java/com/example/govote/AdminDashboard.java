@@ -30,6 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import papaya.in.sendmail.SendMail;
+
 public class AdminDashboard extends AppCompatActivity {
     public static final String TAG="AdminDashboard";
     private DatabaseReference voteReference,electionReference,voteCountReference,userReference;
@@ -96,6 +98,90 @@ public class AdminDashboard extends AppCompatActivity {
                         .child("isEnded").setValue("Y");
 
                 Log.d(TAG, "onCreate: " + uploadId);
+                if(uploadId!=null){
+                    voteReference = FirebaseDatabase.getInstance().getReference("Vote");
+                    voteCountReference=FirebaseDatabase.getInstance().getReference("VoteCount");
+                    userReference=FirebaseDatabase.getInstance().getReference("Users");
+                    electionReference=FirebaseDatabase.getInstance().getReference("Election")
+                            .child(uploadId);
+                    electionReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String electionName=snapshot.child("name").getValue().toString();
+                            Log.d("MyReceiver", "election name: "+electionName);
+                            voteReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for(DataSnapshot snapshot1:snapshot.getChildren()){
+                                        for(DataSnapshot snapshot2:snapshot1.getChildren()) {
+                                            String election = snapshot2.getKey().toString();
+                                            Log.d("MyReceiver", "election names: "+electionName);
+                                            if (electionName.equals(election)) {
+                                                String userid=snapshot1.getKey().toString();
+                                                Log.d("MyReceiver", "Userid: "+userid);
+                                                userReference.child(userid).addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        String email=snapshot.child("email").getValue().toString();
+                                                        Log.d("MyReceiver", "email: "+email);
+                                                        voteCountReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                for(DataSnapshot snapshot3:snapshot.getChildren()){
+                                                                    String name = snapshot3.getKey().toString();
+                                                                    if(name.equals(electionName)){
+                                                                        for (DataSnapshot snapshot4 : snapshot3.getChildren()) {
+                                                                            String voteCount = snapshot4.child("count").getValue().toString();
+                                                                            int counts = Integer.parseInt(voteCount);
+                                                                            Log.d("MyReceiver", "count: "+counts);
+                                                                            String election = snapshot3.getKey().toString();
+                                                                            String candidate = snapshot4.getKey();
+                                                                            SendMail mail = new SendMail("chandbikram001@gmail.com", "Bikram31@",
+                                                                                    email,
+                                                                                    "View "+election+" result",
+                                                                                    election+" result \n  "+candidate+" : "+counts);
+                                                                            mail.execute();
+                                                                            //electionNameTxt.setTextSize(30);
+                                                                            // typeAmountMap.put(candidates.get(i),Integer.parseInt(votes));
+                                                                            //collecting the entries with label name
+
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                                            }
+                                                        });
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                }
             }
         }
     }

@@ -38,6 +38,7 @@ public class MyReceiver extends BroadcastReceiver {
         String text = bundle.getString("message");
         String uploadId=bundle.getString("uploadId");
         Log.d("AdminDashboard", "onReceive: "+text+" uploadid: "+uploadId);
+        /*
         if(text!=null&&uploadId!=null){
             voteReference = FirebaseDatabase.getInstance().getReference("Vote");
             voteCountReference=FirebaseDatabase.getInstance().getReference("VoteCount");
@@ -121,6 +122,7 @@ public class MyReceiver extends BroadcastReceiver {
             });
 
         }
+        */
         //String date = bundle.getString("date");
         //String time=bundle.getString("time");
 

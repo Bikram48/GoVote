@@ -1,10 +1,12 @@
 package com.example.govote;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
@@ -15,6 +17,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -46,10 +49,10 @@ public class HomeFragment extends Fragment {
     private ArrayList<String> candidates = new ArrayList<>();
     private ArrayList<VoteResult> voteResults;
     private TextView electionResultTitle;
-    private DatabaseReference voteReference,electionReference;
+    private HorizontalScrollView horizontalScrollView;
+    private DatabaseReference voteReference,electionReference,voteCountReference;
     SliderView sliderView;
     private ArrayList<String>  elctionList,electionNameList;
-
     private String status;
     private LinearLayout publishedResultLayout;
     int[] images = {R.mipmap.voting1,
@@ -58,63 +61,81 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        voteResults=new ArrayList<>();
+        elctionList=new ArrayList<>();
+        electionNameList=new ArrayList<>();
+
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
+            voteReference = FirebaseDatabase.getInstance().getReference("Vote")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+            electionReference = FirebaseDatabase.getInstance().getReference("Election");
+            voteCountReference = FirebaseDatabase.getInstance().getReference("VoteCount");
+            if (getContext() != null) {
+                voteReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                String electionName = snapshot1.getKey().toString();
+                                Log.d("HomeFragment", "firstname: " + electionName);
+                                elctionList.add(electionName);
+                            }
+
+                            electionReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot2) {
+                                    for (DataSnapshot snapshot3 : snapshot2.getChildren()) {
+                                        String name = snapshot3.child("name").getValue().toString();
+                                        Log.d("HomeFragment", "name: " + name);
+                                        if (elctionList.contains(name)) {
+                                            status = snapshot3.child("isEnded").getValue().toString();
+                                        }
+
+                                    }
+                                    if (status.equals("Y")) {
+                                        Log.d("HomeFragment", "Hello ");
+                                        electionResult(context);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_home, container, false);
-        voteResults=new ArrayList<>();
-        elctionList=new ArrayList<>();
-        electionNameList=new ArrayList<>();
+
+        horizontalScrollView=view.findViewById(R.id.horizontalScrollView);
         publishedResultLayout=view.findViewById(R.id.published_result);
         electionResultTitle=view.findViewById(R.id.textView9);
         sliderView = view.findViewById(R.id.image_slider);
-        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
-            voteReference = FirebaseDatabase.getInstance().getReference("Vote")
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        }
-        voteReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                         String electionName = snapshot1.getKey().toString();
-                        Log.d("HomeFragment", "firstname: "+electionName);
-                        elctionList.add(electionName);
-                    }
-                    electionReference=FirebaseDatabase.getInstance().getReference("Election");
-                    electionReference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot2) {
-                            for(DataSnapshot snapshot3:snapshot2.getChildren()){
-                                String name=snapshot3.child("name").getValue().toString();
-                                Log.d("HomeFragment", "name: "+name);
-                                    if(elctionList.contains(name)){
-                                         status=snapshot3.child("isEnded").getValue().toString();
-                                    }
 
-                            }
-                            if(status.equals("Y")) {
-                                Log.d("HomeFragment", "Hello ");
-                                electionResult();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
         SliderAdapter sliderAdapter = new SliderAdapter(images);
 
         sliderView.setSliderAdapter(sliderAdapter);
@@ -126,17 +147,26 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    public void electionResult(){
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
+    public void electionResult(Context context){
         voteReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()) {
+                    publishedResultLayout.setVisibility(View.VISIBLE);
+                    electionResultTitle.setVisibility(View.VISIBLE);
+                    horizontalScrollView.setVisibility(View.VISIBLE);
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         String electionName = snapshot1.getKey().toString();
                         Log.d("HomeFragment", "firstname: " + electionName);
                         electionNameList.add(electionName);
                     }
-                    FirebaseDatabase.getInstance().getReference("VoteCount")
+                    voteCountReference
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -144,8 +174,8 @@ public class HomeFragment extends Fragment {
                                         for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                                             String name = snapshot1.getKey().toString();
                                             if (electionNameList.contains(name)) {
-                                                CardView newCard = new CardView(getContext());
-                                                PieChart pieChart = new PieChart(getContext());
+                                                CardView newCard = new CardView(context);
+                                                PieChart pieChart = new PieChart(context);
                                                 pieChart.setId(View.generateViewId());
                                                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(800, 300);
                                                 pieChart.setLayoutParams(layoutParams);
@@ -160,7 +190,7 @@ public class HomeFragment extends Fragment {
                                                 pieChart.setHoleColor(Color.parseColor("#0f0f0f"));
                                                 String label = "";
                                                 Map<String, Integer> typeAmountMap = new HashMap<>();
-                                                LinearLayout newLinearLayout = new LinearLayout(getContext());
+                                                LinearLayout newLinearLayout = new LinearLayout(context);
                                                 newLinearLayout.setOrientation(LinearLayout.VERTICAL);
                                                 newCard.setCardElevation(15);
                                                 newCard.setContentPadding(15, 15, 15, 15);
@@ -168,13 +198,13 @@ public class HomeFragment extends Fragment {
                                                 newCard.setPreventCornerOverlap(true);
                                                 newCard.setUseCompatPadding(true);
                                                 newCard.setMaxCardElevation(20);
-                                                TextView electionNameTxt = new TextView(getContext());
+                                                TextView electionNameTxt = new TextView(context);
                                                 electionNameTxt.setTextSize(12f);
                                                 electionNameTxt.setGravity(Gravity.CENTER_HORIZONTAL);
                                                 electionNameTxt.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
                                                 electionNameTxt.setTypeface(null, Typeface.BOLD);
-                                                TextView candidateTxtView = new TextView(getContext());
-                                                TextView voteResultTxtView = new TextView(getContext());
+                                                TextView candidateTxtView = new TextView(context);
+                                                TextView voteResultTxtView = new TextView(context);
                                                 ArrayList<PieEntry> pieEntries = new ArrayList<PieEntry>();
 
                                                 for (DataSnapshot snapshot2 : snapshot1.getChildren()) {
@@ -218,8 +248,7 @@ public class HomeFragment extends Fragment {
                                                 newCard.addView(newLinearLayout);
                                                 newLinearLayout.setBackgroundColor(Color.parseColor("#ffffff"));
                                                 publishedResultLayout.addView(newCard);
-                                                publishedResultLayout.setVisibility(View.VISIBLE);
-                                                electionResultTitle.setVisibility(View.VISIBLE);
+
 
                                             }
                                         }
