@@ -98,6 +98,7 @@ public class AdminDashboard extends AppCompatActivity {
                         .child("isEnded").setValue("Y");
 
                 Log.d(TAG, "onCreate: " + uploadId);
+
                 if(uploadId!=null){
                     voteReference = FirebaseDatabase.getInstance().getReference("Vote");
                     voteCountReference=FirebaseDatabase.getInstance().getReference("VoteCount");
@@ -182,6 +183,7 @@ public class AdminDashboard extends AppCompatActivity {
                     });
 
                 }
+
             }
         }
     }

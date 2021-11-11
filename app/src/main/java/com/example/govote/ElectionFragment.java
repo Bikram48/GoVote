@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.govote.Adapter.OtherElectionAdapter;
 import com.example.govote.Adapter.RunningElectionAdapter;
 import com.example.govote.Model.Election;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,9 +31,11 @@ import java.util.List;
 
 public class ElectionFragment extends Fragment implements RunningElectionAdapter.ClickListener {
     private List<Election> electionList=new ArrayList<>();
+    private List<Election> otherElectionList=new ArrayList<>();
     private DatabaseReference userReference;
     RunningElectionAdapter electionAdapter;
-    private RecyclerView recyclerView,upcomingELectionRV;
+    OtherElectionAdapter otherElectionAdapter;
+    private RecyclerView recyclerView,otherElectionRv;
     DatabaseReference databaseReference;
     public ElectionFragment() {
         // Required empty public constructor
@@ -45,9 +48,53 @@ public class ElectionFragment extends Fragment implements RunningElectionAdapter
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_election, container, false);
         recyclerView=(RecyclerView) view.findViewById(R.id.recyclerView);
-        upcomingELectionRV=(RecyclerView) view.findViewById(R.id.upcomingElectionRV);
-        userReference=FirebaseDatabase.getInstance().getReference("Users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        otherElectionRv=(RecyclerView) view.findViewById(R.id.otherElectionRv);
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
+            userReference = FirebaseDatabase.getInstance().getReference("Users")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        }
+        databaseReference = FirebaseDatabase.getInstance().getReference("Election");
+        databaseReference.orderByChild("electionType").equalTo("other")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot3) {
+                        for (DataSnapshot snapshot2 : snapshot3.getChildren()) {
+                            Log.d("election_fragment", "onDataChange: " + snapshot2.getKey());
+                            Election election=snapshot2.getValue(Election.class);
+                            electionList.add(election);
+                        }
+                        electionAdapter=new RunningElectionAdapter(getContext(),electionList);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        recyclerView.setAdapter(electionAdapter);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+        databaseReference.orderByChild("electionType").equalTo("sga")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()) {
+                            for (DataSnapshot snapshot2 : snapshot.getChildren()) {
+                                Log.d("election_fragment", "onDataChange: " + snapshot2.getKey());
+                                Election election = snapshot2.getValue(Election.class);
+                                otherElectionList.add(election);
+                            }
+                            otherElectionAdapter = new OtherElectionAdapter(getContext(),otherElectionList);
+                            otherElectionRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+                            otherElectionRv.setAdapter(otherElectionAdapter);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+        /*
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -92,10 +139,8 @@ public class ElectionFragment extends Fragment implements RunningElectionAdapter
                                                 electionList.add(election);
                                             }
                                             electionAdapter=new RunningElectionAdapter(getActivity(),electionList);
-                                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-                                            upcomingELectionRV.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+                                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                                             recyclerView.setAdapter(electionAdapter);
-                                            upcomingELectionRV.setAdapter(electionAdapter);
                                         }
 
                                         @Override
@@ -129,6 +174,8 @@ public class ElectionFragment extends Fragment implements RunningElectionAdapter
 
             }
         });
+
+         */
 
 
         /*

@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GoVote">
         <activity
+            android:name=".ProfieEditActivity"
+            android:exported="true" />
+        <activity
+            android:name=".AboutUs"
+            android:exported="true" />
+        <activity
             android:name=".OTPCodeActivity"
             android:exported="true" />
         <activity

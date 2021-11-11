@@ -1,6 +1,8 @@
 package com.example.govote.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,12 +28,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class RunningElectionAdapter extends RecyclerView.Adapter<RunningElectionAdapter.ViewHolder>  {
+public class OtherElectionAdapter extends RecyclerView.Adapter<OtherElectionAdapter.ViewHolder> {
     private List<Election> electionList;
-    ClickListener clickListener;
+    RunningElectionAdapter.ClickListener clickListener;
     private DatabaseReference userReference;
     Context context;
-    public RunningElectionAdapter(Context context,List<Election> electionList){
+    public OtherElectionAdapter(Context context,List<Election> electionList){
         this.electionList=electionList;
         this.context=context;
         this.clickListener=clickListener;
@@ -63,11 +66,12 @@ public class RunningElectionAdapter extends RecyclerView.Adapter<RunningElection
     public int getItemCount() {
         return electionList.size();
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private ClickListener clickListener;
+        private RunningElectionAdapter.ClickListener clickListener;
         private TextView mElectionTitle;
         private ImageView electionBannerImg;
-        public ViewHolder(@NonNull View itemView,ClickListener clickListener) {
+        public ViewHolder(@NonNull View itemView, RunningElectionAdapter.ClickListener clickListener) {
             super(itemView);
             this.clickListener=clickListener;
             mElectionTitle=(TextView) itemView.findViewById(R.id.electionTitle);
@@ -85,10 +89,9 @@ public class RunningElectionAdapter extends RecyclerView.Adapter<RunningElection
                         Log.d("election_fragment", "email: "+email);
                         String[] splitter = email.split("[.]", 0);
                         Log.d("election_fragment", "size: "+splitter.length);
-                        if (splitter.length == 3) {
-                            String second_last = splitter[1];
-                            String last = splitter[2];
-                            if (second_last.equals("mcneese") && last.equals("edu")) {
+                        if (splitter.length == 2) {
+                            String last_word = splitter[1];
+                            if (last_word.equals("com")) {
                                 Log.d("hello", "Hello: ");
                                 int position=getAdapterPosition();
                                 Election election=electionList.get(position);
@@ -97,7 +100,22 @@ public class RunningElectionAdapter extends RecyclerView.Adapter<RunningElection
                                 intent.putExtra("imageurl",election.getImageUrl());
                                 context.startActivity(intent);
                             }else{
+                                Log.d("checkdata", "milyo: ");
+                                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                                builder1.setMessage("Sorry you can't vote on this election.");
+                                builder1.setCancelable(true);
 
+                                builder1.setNegativeButton(
+                                        "Close",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                                AlertDialog alert11 = builder1.create();
+                                alert11.show();
+                                //Toast.makeText(context, "Sorry you can't vote in this election.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -109,11 +127,6 @@ public class RunningElectionAdapter extends RecyclerView.Adapter<RunningElection
                 }
             });
 
-            //this.clickListener.onItemClick(getAdapterPosition());
         }
-    }
-
-    public interface ClickListener{
-        void onItemClick(int position);
     }
 }

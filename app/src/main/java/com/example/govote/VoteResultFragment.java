@@ -1,9 +1,11 @@
 package com.example.govote;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -56,7 +58,7 @@ import dev.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import dev.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
 
 
-public class VoteResultFragment extends Fragment implements View.OnClickListener{
+public class VoteResultFragment extends Fragment {
     private PieChart pieChart;
     private LinearLayout election_result_layout;
     private AppCompatButton publishResultBtn;
@@ -75,36 +77,15 @@ public class VoteResultFragment extends Fragment implements View.OnClickListener
         voterReference=FirebaseDatabase.getInstance().getReference("Users");
     }
 
-    public void startJob(){
-        Job job=jobDispatcher.newJobBuilder().setService(MyService.class)
-                .setLifetime(Lifetime.FOREVER).
-                setRecurring(true)
-                .setTag(JOB_TAG)
-                .setTrigger(Trigger.executionWindow(10,15))
-                .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
-                .setReplaceCurrent(false)
-                .setConstraints(Constraint.ON_ANY_NETWORK)
-                .build();
-        jobDispatcher.mustSchedule(job);
-        Toast.makeText(getContext(), "Job Started", Toast.LENGTH_SHORT).show();
-    }
-
-    public void stopJob(View view){
-        jobDispatcher.cancel(JOB_TAG);
-    }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_vote_result, container, false);
-        pieChart=view.findViewById(R.id.barChart);
-        publishResultBtn=view.findViewById(R.id.publishResult);
-        election_result_layout=view.findViewById(R.id.election_result_layout);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         voteResults=new ArrayList<>();
-       // jobDispatcher=new FirebaseJobDispatcher(new GooglePlayDriver(getContext()));
-        publishResultBtn.setOnClickListener(this::onClick);
+    }
 
-
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
 
         FirebaseDatabase.getInstance().getReference("VoteCount")
                 .addValueEventListener(new ValueEventListener() {
@@ -112,8 +93,8 @@ public class VoteResultFragment extends Fragment implements View.OnClickListener
                     public void onDataChange(@NonNull DataSnapshot snapshot2) {
                         if(snapshot2.exists()){
                             for(DataSnapshot snapshot:snapshot2.getChildren()){
-                                CardView newCard = new CardView(getActivity().getApplicationContext());
-                                PieChart pieChart = new PieChart(getActivity().getApplicationContext());
+                                CardView newCard = new CardView(context);
+                                PieChart pieChart = new PieChart(context);
                                 pieChart.setId(View.generateViewId());
                                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(800, 500);
                                 pieChart.setLayoutParams(layoutParams);
@@ -128,7 +109,7 @@ public class VoteResultFragment extends Fragment implements View.OnClickListener
                                 pieChart.setHoleColor(Color.parseColor("#0f0f0f"));
                                 String label = "Candidates";
                                 Map<String, Integer> typeAmountMap = new HashMap<>();
-                                LinearLayout newLinearLayout = new LinearLayout(getActivity().getApplicationContext());
+                                LinearLayout newLinearLayout = new LinearLayout(context);
                                 newLinearLayout.setOrientation(LinearLayout.VERTICAL);
                                 newCard.setCardElevation(15);
                                 newCard.setContentPadding(15,15,15,15);
@@ -136,9 +117,9 @@ public class VoteResultFragment extends Fragment implements View.OnClickListener
                                 newCard.setPreventCornerOverlap(true);
                                 newCard.setUseCompatPadding(true);
                                 newCard.setMaxCardElevation(20);
-                                TextView electionNameTxt = new TextView(getActivity().getApplicationContext());
+                                TextView electionNameTxt = new TextView(context);
 
-                                TextView candidateTxtView = new TextView(getActivity().getApplicationContext());
+                                TextView candidateTxtView = new TextView(context);
                                 ArrayList<PieEntry> pieEntries=new ArrayList<PieEntry>();
                                 for(DataSnapshot snapshot1:snapshot.getChildren()) {
 
@@ -151,7 +132,7 @@ public class VoteResultFragment extends Fragment implements View.OnClickListener
                                     pieEntries.add(new PieEntry(counts,snapshot1.getKey()));
                                     electionNameTxt.setText(election);
                                     electionNameTxt.setTextSize(30);
-                                   // typeAmountMap.put(candidates.get(i),Integer.parseInt(votes));
+                                    // typeAmountMap.put(candidates.get(i),Integer.parseInt(votes));
                                     //collecting the entries with label name
 
                                 }
@@ -186,89 +167,27 @@ public class VoteResultFragment extends Fragment implements View.OnClickListener
                 });
 
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view=inflater.inflate(R.layout.fragment_vote_result, container, false);
+        pieChart=view.findViewById(R.id.barChart);
+        publishResultBtn=view.findViewById(R.id.publishResult);
+        election_result_layout=view.findViewById(R.id.election_result_layout);
+
+       // jobDispatcher=new FirebaseJobDispatcher(new GooglePlayDriver(getContext()));
+
+
+
+
         //getInfo();
         return view;
     }
 
 
-    private List<VoteInfo> getInfo(){
-        List<VoteInfo> voteInfoList=new ArrayList<>();
-        voteInfoList.add(new VoteInfo("president","bikram","mithun",2));
-        /*
-        voteInfoList.add(new VoteInfo("president","bikram","mithun",2));
-        voteInfoList.add(new VoteInfo("president","bikram","mithun",2));
-        voteInfoList.add(new VoteInfo("president","bikram","mithun",2));
-        voteInfoList.add(new VoteInfo("president","bikram","mithun",2));
-        voteInfoList.add(new VoteInfo("president","bikram","mithun",2));
-        voteInfoList.add(new VoteInfo("president","bikram","mithun",2));
-        voteInfoList.add(new VoteInfo("president","bikram","mithun",2));
-        voteInfoList.add(new VoteInfo("president","bikram","mithun",2));
-        voteInfoList.add(new VoteInfo("president","bikram","mithun",2));
-         */
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
-
-                    VoteInfo voteInfo=new VoteInfo();
-                    FirebaseDatabase.getInstance().getReference("VoteCount")
-                            .child(dataSnapshot.child("candidateName").getValue().toString())
-                            .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot2) {
-                            if(snapshot2.exists()){
-                                String counter=snapshot2.child("count").getValue().toString();
-                                voteInfo.setVoteCount(Integer.parseInt(counter));
-                                Log.d("totalcount", "count: "+total);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
 
 
-                }
-
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        return voteInfoList;
-    }
-
-    @Override
-    public void onClick(View view) {
-        BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(getActivity())
-                .setTitle("Result Publish?")
-                .setMessage("Are you sure want to publish the result?")
-                .setCancelable(true)
-                .setPositiveButton("Via Email ", R.drawable.ic_send, new BottomSheetMaterialDialog.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which) {
-                        startJob();
-                        Toast.makeText(getContext(), "Deleted!", Toast.LENGTH_SHORT).show();
-                        dialogInterface.dismiss();
-                    }
-                })
-                .setNegativeButton("To HomePage", R.drawable.ic_baseline_home_24, new BottomSheetMaterialDialog.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which) {
-                        Toast.makeText(getContext(), "Cancelled!", Toast.LENGTH_SHORT).show();
-                        dialogInterface.dismiss();
-                    }
-                })
-                .build();
-        // Show Dialog
-        mBottomSheetDialog.show();
-
-    }
 }

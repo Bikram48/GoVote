@@ -2,7 +2,12 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/aclonica</item>
+        <item>@font/acme</item>
         <item>@font/amaranth_bold</item>
+        <item>@font/baloo</item>
         <item>@font/bungee</item>
+        <item>@font/copse</item>
+        <item>@font/forum</item>
+        <item>@font/inder</item>
     </array>
 </resources>

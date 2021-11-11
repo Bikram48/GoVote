@@ -38,7 +38,7 @@ public class MyReceiver extends BroadcastReceiver {
         String text = bundle.getString("message");
         String uploadId=bundle.getString("uploadId");
         Log.d("AdminDashboard", "onReceive: "+text+" uploadid: "+uploadId);
-        /*
+/*
         if(text!=null&&uploadId!=null){
             voteReference = FirebaseDatabase.getInstance().getReference("Vote");
             voteCountReference=FirebaseDatabase.getInstance().getReference("VoteCount");
@@ -69,7 +69,7 @@ public class MyReceiver extends BroadcastReceiver {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                         for(DataSnapshot snapshot3:snapshot.getChildren()){
-                                                            String name = snapshot1.getKey().toString();
+                                                            String name = snapshot3.getKey().toString();
                                                             if(name.equals(electionName)){
                                                                 for (DataSnapshot snapshot4 : snapshot3.getChildren()) {
                                                                     String voteCount = snapshot2.child("count").getValue().toString();
@@ -122,7 +122,9 @@ public class MyReceiver extends BroadcastReceiver {
             });
 
         }
-        */
+
+ */
+
         //String date = bundle.getString("date");
         //String time=bundle.getString("time");
 

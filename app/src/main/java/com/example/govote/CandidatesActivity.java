@@ -33,7 +33,6 @@ public class CandidatesActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     CandidateAdapter candidateAdapter;
     DatabaseReference databaseReference;
-    private ImageView bannerImg;
     private String electionCat;
     private String imageUrl;
     @Override
@@ -41,14 +40,8 @@ public class CandidatesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_candidates);
         recyclerView=findViewById(R.id.recyclerView);
-        bannerImg=(ImageView) findViewById(R.id.bannerImg);
         electionCat=getIntent().getStringExtra("cat").trim().toString();
         imageUrl=getIntent().getStringExtra("imageurl").trim().toString();
-        Picasso.get().load(imageUrl)
-                .fit()
-                .centerCrop()
-                .into(bannerImg);
-        Log.d("intentdata", electionCat);
         candidateList=new ArrayList<>();
         databaseReference= FirebaseDatabase.getInstance().getReference("Candidate");
         databaseReference.orderByChild("electionCat").equalTo(electionCat).addValueEventListener(new ValueEventListener() {

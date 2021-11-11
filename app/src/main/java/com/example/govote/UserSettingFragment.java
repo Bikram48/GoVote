@@ -13,11 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
+import com.airbnb.lottie.L;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class UserSettingFragment extends Fragment {
-    private Button mLogoutBtn;
+    private LinearLayout mLogoutBtn,mAboutUsBtn,mProfileEditBtn;
 
     public UserSettingFragment() {
         // Required empty public constructor
@@ -33,12 +35,21 @@ public class UserSettingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_user_setting, container, false);
-        mLogoutBtn=(Button) view.findViewById(R.id.logoutBtn);
+        mLogoutBtn=(LinearLayout) view.findViewById(R.id.logoutBtn);
+        mAboutUsBtn=(LinearLayout) view.findViewById(R.id.aboutBtn);
+        mProfileEditBtn=(LinearLayout) view.findViewById(R.id.profileEdit);
         mLogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getActivity(),UserAuthActivity.class));
+            }
+        });
+        mAboutUsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(),AboutUs
+                .class));
             }
         });
         return view;

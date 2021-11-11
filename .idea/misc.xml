@@ -6,6 +6,7 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.12447916666666667" />
         <entry key="app/src/main/res/drawable/arrow_drop_drown.xml" value="0.11875" />
         <entry key="app/src/main/res/drawable/candidate.xml" value="0.3260416666666667" />
+        <entry key="app/src/main/res/drawable/ic_arrow_back.xml" value="0.26256410256410256" />
         <entry key="app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.3260416666666667" />
         <entry key="app/src/main/res/drawable/ic_candidate.xml" value="0.18385416666666668" />
         <entry key="app/src/main/res/drawable/item_selector.xml" value="0.3260416666666667" />
@@ -16,12 +17,14 @@
         <entry key="app/src/main/res/drawable/table_content_bg.xml" value="0.12552083333333333" />
         <entry key="app/src/main/res/drawable/table_header_border.xml" value="0.12552083333333333" />
         <entry key="app/src/main/res/drawable/vote_running.xml" value="0.3260416666666667" />
+        <entry key="app/src/main/res/layout/activity_about_us.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/activity_add_candidate.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_add_election.xml" value="0.15572916666666667" />
         <entry key="app/src/main/res/layout/activity_admin_dashboard.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/activity_candidates.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23385416666666667" />
         <entry key="app/src/main/res/layout/activity_otpcode.xml" value="0.25052083333333336" />
+        <entry key="app/src/main/res/layout/activity_profie_edit.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/activity_user_auth.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/activity_user_setting.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_voter_info.xml" value="0.23697916666666666" />
@@ -30,7 +33,7 @@
         <entry key="app/src/main/res/layout/election_result_item.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/fragment_add_election.xml" value="0.2476489028213166" />
         <entry key="app/src/main/res/layout/fragment_admin_home.xml" value="0.29583333333333334" />
-        <entry key="app/src/main/res/layout/fragment_candidate.xml" value="0.23645833333333333" />
+        <entry key="app/src/main/res/layout/fragment_candidate.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_candidates.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_election.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.25052083333333336" />
@@ -42,7 +45,7 @@
         <entry key="app/src/main/res/layout/fragment_user_setting.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/layout/fragment_vote_result.xml" value="0.23645833333333333" />
         <entry key="app/src/main/res/layout/notification_layout.xml" value="0.25052083333333336" />
-        <entry key="app/src/main/res/layout/running_election_item.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/running_election_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/slider_item_layout.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/voteresult_list_item.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/voterinfoitem.xml" value="0.25104166666666666" />

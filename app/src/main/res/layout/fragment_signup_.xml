@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#0041C4"
+    android:background="#FE9755"
     tools:context=".Signup_Fragment">
     <ImageView
         android:id="@+id/signupBackImage"
@@ -150,7 +150,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:backgroundTint="#0041C4"
+            android:backgroundTint="#FE9755"
             android:background="@drawable/signin_btn_bg"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="20dp"
