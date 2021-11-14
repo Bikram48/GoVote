@@ -28,6 +28,8 @@
         <entry key="app/src/main/res/layout/activity_user_auth.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/activity_user_setting.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_voter_info.xml" value="0.23697916666666666" />
+        <entry key="app/src/main/res/layout/admin_all_candidate_item.xml" value="0.25052083333333336" />
+        <entry key="app/src/main/res/layout/admin_all_election_item.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/candidate_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/content_admin_dashboard.xml" value="0.14114583333333333" />
         <entry key="app/src/main/res/layout/election_result_item.xml" value="0.25052083333333336" />

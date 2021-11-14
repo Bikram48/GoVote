@@ -14,12 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.airbnb.lottie.L;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class UserSettingFragment extends Fragment {
     private LinearLayout mLogoutBtn,mAboutUsBtn,mProfileEditBtn;
+    private FloatingActionButton backBtn;
 
     public UserSettingFragment() {
         // Required empty public constructor
@@ -38,6 +41,14 @@ public class UserSettingFragment extends Fragment {
         mLogoutBtn=(LinearLayout) view.findViewById(R.id.logoutBtn);
         mAboutUsBtn=(LinearLayout) view.findViewById(R.id.aboutBtn);
         mProfileEditBtn=(LinearLayout) view.findViewById(R.id.profileEdit);
+        backBtn=(FloatingActionButton) view.findViewById(R.id.back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ElectionFragment()).commit();
+            }
+        });
         mLogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,6 +61,12 @@ public class UserSettingFragment extends Fragment {
             public void onClick(View view) {
                 startActivity(new Intent(getContext(),AboutUs
                 .class));
+            }
+        });
+        mProfileEditBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(),ProfieEditActivity.class));
             }
         });
         return view;

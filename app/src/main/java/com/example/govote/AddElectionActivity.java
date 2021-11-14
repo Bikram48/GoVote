@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -26,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.govote.Adapter.AdminAllElectionAdapter;
 import com.example.govote.Model.Election;
 import com.example.govote.Service.MyReceiver;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -46,6 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class AddElectionActivity extends AppCompatActivity {
     private EditText electionName;
@@ -61,8 +65,13 @@ public class AddElectionActivity extends AppCompatActivity {
     private StorageTask storageTask;
     private String electionType;
     private String startDate,endDate;
+    private RecyclerView electionListRV;
+    private List<Election> electionList=new ArrayList<>();
     private ArrayList<String> dropdownItems=new ArrayList<>();
+    private DatabaseReference electionRef;
+    AdminAllElectionAdapter adminAllElectionAdapter;
     Date date_minimal,date_maximal;
+    Election election;
     Calendar  date = Calendar.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +83,31 @@ public class AddElectionActivity extends AppCompatActivity {
         submitBtn=(AppCompatButton) findViewById(R.id.submitBtn);
         spinner=(Spinner) findViewById(R.id.spinner);
         endDateTimePickerBtn=findViewById(R.id.endDateTimePickerBtn);
-        dropdownItems.add("sga");
-        dropdownItems.add("other");
+        electionListRV=findViewById(R.id.electionListRV);
+        electionRef=FirebaseDatabase.getInstance().getReference("Election");
+
+        electionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        election = snapshot1.getValue(Election.class);
+                        electionList.add(election);
+                    }
+                    adminAllElectionAdapter= new AdminAllElectionAdapter(electionList, AddElectionActivity.this);
+                    electionListRV.setLayoutManager(new LinearLayoutManager(AddElectionActivity.this));
+                    electionListRV.setAdapter(adminAllElectionAdapter);
+                    adminAllElectionAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        dropdownItems.add("SGA Elections");
+        dropdownItems.add("Other Elections");
         // ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(AddCandidateActivity.this, android.R.layout.simple_spinner_dropdown_item,dropdownItems);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(AddElectionActivity.this, android.R.layout.simple_spinner_dropdown_item, dropdownItems);
 //set the spinners adapter to the previously created one.
@@ -83,7 +115,14 @@ public class AddElectionActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                electionType=(String) adapterView.getItemAtPosition(i).toString();
+                if(adapterView.getItemAtPosition(i).toString().equals("SGA Elections")){
+                    electionType="sga";
+                }
+                if(adapterView.getItemAtPosition(i).toString().equals("Other Elections")){
+                    electionType="other";
+                }
+               // electionType=(String) adapterView.getItemAtPosition(i).toString();
+
             }
 
             @Override

@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "438671202231",
-    "project_id": "govote-5e066",
-    "storage_bucket": "govote-5e066.appspot.com"
+    "project_number": "962832079250",
+    "project_id": "govote-983f7",
+    "storage_bucket": "govote-983f7.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:438671202231:android:23c57dbd9325df7bd5fa32",
+        "mobilesdk_app_id": "1:962832079250:android:0b2d13b21bd0848d6ac94b",
         "android_client_info": {
           "package_name": "com.example.govote"
         }
       },
       "oauth_client": [
         {
-          "client_id": "438671202231-b8ns02l695f44mblfh7rhe6ki9it85h5.apps.googleusercontent.com",
+          "client_id": "962832079250-m2hh1hfn7lqqriu7s0vd8vtg6v7015j3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.govote",
@@ -22,20 +22,20 @@
           }
         },
         {
-          "client_id": "438671202231-t4k5ag8n4p99idfp6b0vuht0rjn1ss3s.apps.googleusercontent.com",
+          "client_id": "962832079250-7cpn58iis407173ajdp6c67jrm9k823c.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBKE5-j3aSqSw8c9uXwkM6YYGERhH45RcI"
+          "current_key": "AIzaSyCEJkNIHTqIpA0A5MRmp19JdP-G6ulTFbk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "438671202231-t4k5ag8n4p99idfp6b0vuht0rjn1ss3s.apps.googleusercontent.com",
+              "client_id": "962832079250-7cpn58iis407173ajdp6c67jrm9k823c.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

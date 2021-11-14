@@ -107,7 +107,7 @@ public class VoteResultFragment extends Fragment {
                                 pieChart.animateY(1400, Easing.EaseInOutQuad);
                                 //setting the color of the hole in the middle, default white
                                 pieChart.setHoleColor(Color.parseColor("#0f0f0f"));
-                                String label = "Candidates";
+                                String label = "";
                                 Map<String, Integer> typeAmountMap = new HashMap<>();
                                 LinearLayout newLinearLayout = new LinearLayout(context);
                                 newLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -153,7 +153,7 @@ public class VoteResultFragment extends Fragment {
                                 newLinearLayout.addView(pieChart);
                                 newLinearLayout.setPadding(5,5,5,5);
                                 newCard.addView(newLinearLayout);
-                                newLinearLayout.setBackgroundColor(Color.parseColor("#ffc979"));
+                                newLinearLayout.setBackgroundColor(Color.parseColor("#ffffff"));
                                 election_result_layout.addView(newCard);
                             }
                         }

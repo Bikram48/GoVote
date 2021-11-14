@@ -1,6 +1,8 @@
 package com.example.govote.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,6 +54,7 @@ public class RunningElectionAdapter extends RecyclerView.Adapter<RunningElection
         Election currentElection=electionList.get(position);
         Log.d("boy", currentElection.getImageUrl());
         holder.mElectionTitle.setText(currentElection.getName());
+        holder.electionDeadline.setText("Deadline: "+currentElection.getEndDate());
         Picasso.get().load(currentElection.getImageUrl())
                 .fit()
                 .centerCrop()
@@ -67,11 +70,13 @@ public class RunningElectionAdapter extends RecyclerView.Adapter<RunningElection
         private ClickListener clickListener;
         private TextView mElectionTitle;
         private ImageView electionBannerImg;
+        private TextView electionDeadline;
         public ViewHolder(@NonNull View itemView,ClickListener clickListener) {
             super(itemView);
             this.clickListener=clickListener;
             mElectionTitle=(TextView) itemView.findViewById(R.id.electionTitle);
             electionBannerImg=(ImageView) itemView.findViewById(R.id.electionBannerImg);
+            electionDeadline=(TextView) itemView.findViewById(R.id.electionDeadline);
             itemView.setOnClickListener(this::onClick);
         }
 
@@ -85,10 +90,9 @@ public class RunningElectionAdapter extends RecyclerView.Adapter<RunningElection
                         Log.d("election_fragment", "email: "+email);
                         String[] splitter = email.split("[.]", 0);
                         Log.d("election_fragment", "size: "+splitter.length);
-                        if (splitter.length == 3) {
-                            String second_last = splitter[1];
-                            String last = splitter[2];
-                            if (second_last.equals("mcneese") && last.equals("edu")) {
+                        if (splitter.length == 2) {
+                            String last = splitter[1];
+                            if (last.equals("edu")) {
                                 Log.d("hello", "Hello: ");
                                 int position=getAdapterPosition();
                                 Election election=electionList.get(position);
@@ -97,7 +101,21 @@ public class RunningElectionAdapter extends RecyclerView.Adapter<RunningElection
                                 intent.putExtra("imageurl",election.getImageUrl());
                                 context.startActivity(intent);
                             }else{
+                                Log.d("checkdata", "milyo: ");
+                                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                                builder1.setMessage("Sorry you can't vote on this election.");
+                                builder1.setCancelable(true);
 
+                                builder1.setNegativeButton(
+                                        "Close",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                                AlertDialog alert11 = builder1.create();
+                                alert11.show();
                             }
                         }
                     }

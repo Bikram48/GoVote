@@ -55,6 +55,7 @@ public class OtherElectionAdapter extends RecyclerView.Adapter<OtherElectionAdap
         Election currentElection=electionList.get(position);
         Log.d("boy", currentElection.getImageUrl());
         holder.mElectionTitle.setText(currentElection.getName());
+        holder.electionDeadline.setText("Deadline: "+currentElection.getEndDate());
         Picasso.get().load(currentElection.getImageUrl())
                 .fit()
                 .centerCrop()
@@ -71,11 +72,13 @@ public class OtherElectionAdapter extends RecyclerView.Adapter<OtherElectionAdap
         private RunningElectionAdapter.ClickListener clickListener;
         private TextView mElectionTitle;
         private ImageView electionBannerImg;
+        private TextView electionDeadline;
         public ViewHolder(@NonNull View itemView, RunningElectionAdapter.ClickListener clickListener) {
             super(itemView);
             this.clickListener=clickListener;
             mElectionTitle=(TextView) itemView.findViewById(R.id.electionTitle);
             electionBannerImg=(ImageView) itemView.findViewById(R.id.electionBannerImg);
+            electionDeadline=(TextView) itemView.findViewById(R.id.electionDeadline);
             itemView.setOnClickListener(this::onClick);
         }
 

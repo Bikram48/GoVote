@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GoVote">
         <activity
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             android:name=".ProfieEditActivity"
             android:exported="true" />
         <activity

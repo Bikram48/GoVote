@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:fontFamily="sans-serif"
-        android:text="This is your electronic portal to vote"
+        android:text="This is your electronic portal to vote."
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />

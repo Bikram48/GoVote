@@ -29,13 +29,17 @@ public class VoterInfoActivity extends AppCompatActivity {
         voterInfoRV=findViewById(R.id.voterInfoRV);
         voterInfo=new ArrayList<>();
         voterInfoRef= FirebaseDatabase.getInstance().getReference("Users");
-        voterInfoRef.addValueEventListener(new ValueEventListener() {
+        voterInfoRef.orderByChild("isUser").equalTo("1").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     for(DataSnapshot snapshot1:snapshot.getChildren()){
-                        String email=snapshot1.child("email").getValue().toString();
-                        voterInfo.add(email);
+                        String role=snapshot1.child("isUser").getValue().toString();
+                        if(role.equals("1")){
+                            String email=snapshot1.child("email").getValue().toString();
+                            voterInfo.add(email);
+                        }
+
                     }
                     voterInfoAdapter=new VoterInfoAdapter(VoterInfoActivity.this,voterInfo);
                     voterInfoRV.setLayoutManager(new LinearLayoutManager(VoterInfoActivity.this));
@@ -48,6 +52,5 @@ public class VoterInfoActivity extends AppCompatActivity {
 
             }
         });
-
     }
 }

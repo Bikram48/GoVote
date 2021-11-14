@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -56,7 +58,7 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
         FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         if(firebaseUser!=null){
 
-            startActivity(new Intent(UserAuthActivity.this,MainActivity.class));
+            startActivity(new Intent(UserAuthActivity.this,AdminDashboard.class));
         }
 
         addFragment();
@@ -138,6 +140,16 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(task.isSuccessful()){
+                                        SharedPreferences sharedPreferences=getSharedPreferences("UserLoginDetail", Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putString("email", user.getEmail());
+                                        editor.putString("password",user.getPassword());
+                                        editor.commit();
+
+                                        SharedPreferences sh = getSharedPreferences("UserLoginDetail", Context.MODE_PRIVATE);
+                                        String email = sh.getString("email", "");
+                                        String password = sh.getString("password", "");
+                                        Log.d("ProfileEdit", "email: " + email + " password " + password);
                                         if(user.getUserRole().equals("Admin")){
                                             Log.d("user_role", "admin or user: ");
                                             checkAdmin(mAuth.getCurrentUser().getUid());
@@ -156,7 +168,7 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
         Log.d("userid", userId);
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
         Query query=databaseReference.child("Users").child(userId);
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.hasChild("isUser")){
