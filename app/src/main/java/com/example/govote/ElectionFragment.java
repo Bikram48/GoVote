@@ -61,11 +61,12 @@ public class ElectionFragment extends Fragment implements RunningElectionAdapter
                         for (DataSnapshot snapshot2 : snapshot3.getChildren()) {
                             Log.d("election_fragment", "onDataChange: " + snapshot2.getKey());
                             Election election=snapshot2.getValue(Election.class);
-                            electionList.add(election);
+                            otherElectionList.add(election);
                         }
-                        electionAdapter=new RunningElectionAdapter(getContext(),electionList);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        recyclerView.setAdapter(electionAdapter);
+                        otherElectionAdapter = new OtherElectionAdapter(getContext(),otherElectionList);
+                        otherElectionRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        otherElectionRv.setAdapter(otherElectionAdapter);
+
                     }
 
                     @Override
@@ -81,11 +82,11 @@ public class ElectionFragment extends Fragment implements RunningElectionAdapter
                             for (DataSnapshot snapshot2 : snapshot.getChildren()) {
                                 Log.d("election_fragment", "onDataChange: " + snapshot2.getKey());
                                 Election election = snapshot2.getValue(Election.class);
-                                otherElectionList.add(election);
+                                electionList.add(election);
                             }
-                            otherElectionAdapter = new OtherElectionAdapter(getContext(),otherElectionList);
-                            otherElectionRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-                            otherElectionRv.setAdapter(otherElectionAdapter);
+                            electionAdapter=new RunningElectionAdapter(getContext(),electionList);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                            recyclerView.setAdapter(electionAdapter);
                         }
                     }
 

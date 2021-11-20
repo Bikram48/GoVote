@@ -101,9 +101,9 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.View
                         if(snapshot.getKey().equals(elctionCat)){
                             String candidate=snapshot.child("candidateName").getValue().toString();
                             if(candidate.equals(candidateName.getText().toString())){
-                                mVoteBtn.setText("Voted");
+                                mVoteBtn.setText("Already Voted");
                             }else {
-                                mVoteBtn.setText("Vote Now");
+                                mVoteBtn.setText("Already Voted");
                                 mVoteBtn.setEnabled(false);
                                 // candidate.setClicked(true);
                             }

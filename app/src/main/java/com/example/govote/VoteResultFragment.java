@@ -107,6 +107,7 @@ public class VoteResultFragment extends Fragment {
                                 pieChart.animateY(1400, Easing.EaseInOutQuad);
                                 //setting the color of the hole in the middle, default white
                                 pieChart.setHoleColor(Color.parseColor("#0f0f0f"));
+                                pieChart.setEntryLabelColor(Color.parseColor("#a30707"));
                                 String label = "";
                                 Map<String, Integer> typeAmountMap = new HashMap<>();
                                 LinearLayout newLinearLayout = new LinearLayout(context);
@@ -136,6 +137,7 @@ public class VoteResultFragment extends Fragment {
                                     //collecting the entries with label name
 
                                 }
+                                candidateTxtView.setTextColor(Color.parseColor("#a30707"));
                                 newLinearLayout.addView(electionNameTxt);
                                 PieDataSet pieDataSet = new PieDataSet(pieEntries,label);
                                 //setting text size of the value

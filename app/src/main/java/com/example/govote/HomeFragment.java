@@ -101,9 +101,11 @@ public class HomeFragment extends Fragment {
                                         }
 
                                     }
-                                    if (status.equals("Y")) {
-                                        Log.d("HomeFragment", "Hello ");
-                                        electionResult(context);
+                                    if(status!=null) {
+                                        if (status.equals("Y")) {
+                                            Log.d("HomeFragment", "Hello ");
+                                            electionResult(context);
+                                        }
                                     }
                                 }
 

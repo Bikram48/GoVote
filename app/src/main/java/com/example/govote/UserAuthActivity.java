@@ -57,8 +57,30 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
         FirebaseApp.initializeApp(UserAuthActivity.this);
         FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         if(firebaseUser!=null){
+            FirebaseDatabase.getInstance().getReference("Users")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot snapshot1:snapshot.getChildren()){
+                                Log.d("UserAuthActivity", "onDataChange: "+snapshot1.getKey());
+                                if(snapshot1.getKey().equals("isAdmin")){
+                                    Log.d("UserAuthActivity", "onDataChange: "+snapshot1.getKey());
+                                    startActivity(new Intent(UserAuthActivity.this,AdminDashboard.class));
+                                }
+                                if(snapshot1.getKey().equals("isUser")){
+                                    Log.d("UserAuthActivity", "onDataChange: "+snapshot1.getKey());
+                                    startActivity(new Intent(UserAuthActivity.this,MainActivity.class));
+                                }
+                            }
+                        }
 
-            startActivity(new Intent(UserAuthActivity.this,AdminDashboard.class));
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
         }
 
         addFragment();
@@ -173,15 +195,13 @@ public class UserAuthActivity extends AppCompatActivity implements Signup_Fragme
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.hasChild("isUser")){
                     Log.d("userid", snapshot.getKey());
-                    sendOtpCode(user.getEmail(),  user.getPhoneNumber(),user.getPassword(), user.getUserRole());
-                    /*
-                    if(mAuth.getCurrentUser().isEmailVerified()) {
-                        startActivity(new Intent(UserAuthActivity.this, MainActivity.class));
-                    }else{
-                        Toast.makeText(UserAuthActivity.this, "Please verify your email first", Toast.LENGTH_SHORT).show();
-                    }
+                    //if(mAuth.getCurrentUser().isEmailVerified()) {
+                        sendOtpCode(user.getEmail(),  user.getPhoneNumber(),user.getPassword(), user.getUserRole());
+                   // }else{
+                     //   Toast.makeText(UserAuthActivity.this, "Please verify your email first", Toast.LENGTH_SHORT).show();
+                    //}
 
-                     */
+
                 }
                 else{
                     Toast.makeText(UserAuthActivity.this, "No user found", Toast.LENGTH_SHORT).show();

@@ -20,7 +20,7 @@
         android:layout_marginLeft="10dp"/>
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="590dp">
             <LinearLayout
                 android:id="@+id/election_result_layout"
                 android:layout_width="match_parent"

@@ -37,6 +37,14 @@ quasi aliquam eligendi, placeat qui corporis!</string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="voting_process">
+        \n\u2022 	Go to election portal during the election time.\n\u2022
+	Choose the election you would like to vote.\n\u2022
+ Scroll to see the list of candidates.\n\u2022
+	Cast your vote for the candidate.
+\n\n\nAnd remember you can only vote once. Elections results will be out as soon as the election is over.
+
+    </string>
     <string name="candidate_page_description">Select the candidates and click VOTE NOW to vote the selected candidate. You are allowed to vote only one candidate on the election. </string>
     <string name="app_info">GoVote is the online voting app whhich allows users to vote on the live elections. Each election contains several candidates and to vote on the election candidates must be selected.</string>
 </resources>

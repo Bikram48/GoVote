@@ -26,6 +26,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Login_Fragment extends Fragment {
     private EditText mEmailId,mPassword;
     private Button mLoginBtn;
@@ -60,6 +63,8 @@ public class Login_Fragment extends Fragment {
                 //User user;
                 if(email.equals("") && password.equals("")){
                     Toast.makeText(getContext(), "Please fill all the field", Toast.LENGTH_SHORT).show();
+                }else if(!isEmailValid(email)){
+                    Toast.makeText(getContext(), "Please enter the valid email", Toast.LENGTH_SHORT).show();
                 }else if(radioGroup.getCheckedRadioButtonId()==-1){
                     Toast.makeText(getContext(), "Please select your role", Toast.LENGTH_SHORT).show();
                 }else{
@@ -78,6 +83,8 @@ public class Login_Fragment extends Fragment {
                                             User user = new User(email, password, phone, value);
                                             fragmentListener.loginClicked(user);
                                         }
+                                    }else {
+                                        Toast.makeText(getContext(), "User doesn't exist", Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -105,6 +112,12 @@ public class Login_Fragment extends Fragment {
             }
         });
         return view;
+    }
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     @Override
