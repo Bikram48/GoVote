@@ -38,7 +38,7 @@ public class MyReceiver extends BroadcastReceiver {
         String text = bundle.getString("message");
         String uploadId=bundle.getString("uploadId");
         Log.d("AdminDashboard", "onReceive: "+text+" uploadid: "+uploadId);
-/*
+
         if(text!=null&&uploadId!=null){
             voteReference = FirebaseDatabase.getInstance().getReference("Vote");
             voteCountReference=FirebaseDatabase.getInstance().getReference("VoteCount");
@@ -72,10 +72,13 @@ public class MyReceiver extends BroadcastReceiver {
                                                             String name = snapshot3.getKey().toString();
                                                             if(name.equals(electionName)){
                                                                 for (DataSnapshot snapshot4 : snapshot3.getChildren()) {
-                                                                    String voteCount = snapshot2.child("count").getValue().toString();
+                                                                    String voteCount = snapshot4.child("count").getValue().toString();
                                                                     int counts = Integer.parseInt(voteCount);
-                                                                    String election = snapshot1.getKey().toString();
-                                                                    String candidate = snapshot2.getKey();
+                                                                    String election = snapshot3.getKey().toString();
+                                                                    //Log.d("e", "onDataChange: ");
+                                                                    String candidate = snapshot4.getKey();
+                                                                    Log.d("MyReceiver", "ElectionName: "+election);
+                                                                    Log.d("MyReceiver", "CandidateName: "+candidate);
                                                                     SendMail mail = new SendMail("chandbikram001@gmail.com", "Bikram31@",
                                                                             email,
                                                                             "View "+election+" result",
@@ -123,7 +126,7 @@ public class MyReceiver extends BroadcastReceiver {
 
         }
 
- */
+        /*
 
         //String date = bundle.getString("date");
         //String time=bundle.getString("time");
@@ -170,5 +173,7 @@ public class MyReceiver extends BroadcastReceiver {
 
         Notification notification = mBuilder.build();
         notificationManager.notify(1, notification);
+
+         */
     }
 }

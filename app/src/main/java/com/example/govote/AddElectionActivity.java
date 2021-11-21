@@ -312,7 +312,7 @@ public class AddElectionActivity extends AppCompatActivity {
      */
 
 
-    public void setAlaram(String message, String date) {
+    public void setAlaram(String message, String datee) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -335,7 +335,7 @@ public class AddElectionActivity extends AppCompatActivity {
         //String dateandtime = date + " " + time;
         DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm");
         try {
-            Date date1 = formatter.parse(date);
+            Date date1 = formatter.parse(datee);
             alarmManager.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
             Log.d("alaram_manager", "setAlaram: "+date1.getMinutes());
         } catch (ParseException e) {
